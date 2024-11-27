@@ -21,7 +21,7 @@ repository               : "wangzican/wangzican.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "myprofile.png"
   name             : "Zican Wang"
   pronouns         : # example: "she/her"  
   bio              : "MSc student"
@@ -156,6 +156,7 @@ include:
   - .htaccess
   - _pages
   - files
+  - _work_in_progress_pages
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
