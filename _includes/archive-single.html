@@ -1,9 +1,9 @@
 {% include base_path %}
 
-{% if post.header.teaser %}
-  {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
+{% if post.thumbnail %}
+  {% capture thumbnail %}{{ post.thumbnail }}{% endcapture %}
 {% else %}
-  {% assign teaser = site.teaser %}
+  {% assign thumbnail = site.teaser %}
 {% endif %}
 
 {% if post.id %}
@@ -12,19 +12,59 @@
   {% assign title = post.title %}
 {% endif %}
 
-<div class="{{ include.type | default: "list" }}__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    {% if include.type == "grid" and teaser %}
-      <div class="archive__item-teaser">
-        <img src=
-          {% if teaser contains "://" %}
-            "{{ teaser }}"
-          {% else %}
-            "{{ teaser | prepend: "/images/" | prepend: base_path }}"
-          {% endif %}
-          alt="">
-      </div>
+
+<li style="display: flex; justify-content: left; align-items: center; margin: 40px 0 0 -38px;">
+  <img src="{{ thumbnail }}" alt="Thumbnail" style="height: auto; width: 220px;"/>
+  <p style="margin: 0 0 0 20px;">
+    <!-- title -->
+    <span style="font-size: 20px;"><b>
+      {% if post.link %}
+      <!-- For external links, add a link symbol -->
+        <a class="hiddenlink" href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+      {% else %}
+        <a class="hiddenlink" href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+      {% endif %}
+    </b></span>
+    <!-- Add a clock symbol for read time -->
+    {% if post.read_time %}
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> {% include read-time.html %}</p>
     {% endif %}
+    <br style="display: block; margin-top: -3px">
+    <span style="font-size: 15px;">
+      
+      {% for author in post.authors %}
+        {% assign normalized_name = author.name | downcase | strip %}
+        {% assign normalized_aliases = site.author.aliases | join: ',' | downcase | split: ',' %}            
+        {% if normalized_aliases contains normalized_name %}
+          <a class="hiddenlink" href="{{ site.author.uri }}"><b>{{ author.name }}</b></a>
+        {% elsif author.url %}
+          <a class="hiddenlink" href="{{ author.url }}">{{ author.name }}</a>
+        {% else %}
+          {{ author.name }}
+        {% endif %}
+        {% if forloop.last == false %}, {% endif %}
+      {% endfor %}
+    </span> <br>
+    <span style="font-size: 15px;">{{ post.type }}<br></span>
+    <span style="font-size: 11px;">
+      {{ post.date | date: "%Y-%m-%d" }}<br>
+      {% if post.pdf %}
+        <a class="mybutton" href="{{ post.pdf }}">PDF</a>&nbsp;
+      {% endif %}
+      <!-- there will always be a auto-generated url -->
+      {% if post.link %}
+      <!-- For external links, add a link symbol -->
+        <a class="mybutton" href="{{ post.link }}">Project Page</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+      {% else %}
+        <a class="mybutton" href="{{ base_path }}{{ post.url }}" rel="permalink">Project Page</a>
+      {% endif %}
+    </span>
+  </p>
+</li>
+
+
+<!-- <div class="{{ include.type | default: "list" }}__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
 
     <h2 class="archive__item-title" itemprop="headline">
       {% if post.link %}
@@ -33,11 +73,6 @@
         <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h2>
-    
-    {% if post.read_time %}
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> {% include read-time.html %}</p>
-    {% endif %}
-
         {% if post.collection == 'teaching' %}
           <p> {{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }} </p>
         {% elsif post.collection == 'publications' %}
@@ -67,4 +102,4 @@
     {% endif %}
 
   </article>
-</div>
+</div> -->
