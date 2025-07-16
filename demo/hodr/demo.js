@@ -16,12 +16,19 @@ const calcGradGaussian1DPDF = (x, sigma) => {
     const val = (Math.abs(x) / Math.pow(sigma, 2)) * calcGaussian1D(x, sigma = sigma);
     return alpha * val;
 };
+const calcHessGaussian1DCDF = (x, sigma) => {
+    // CDF of the Hessian Gaussian, i.e., the integral of the PDF a reshaped grad gaussian
+    const factor = x / (4 * sigma) * Math.exp(0.5);
+    const shape = Math.exp(-x * x / (2 * sigma * sigma));
+    const val = x < -sigma ? -factor * shape : x > sigma ? 1 - factor * shape : 0.5 + factor * shape;
+    return val;
+};
 
 const calcHessGaussian1DPDF = (x, sigma) => {
     const denom = Math.pow(sigma, 2);
     const gaussian = calcGaussian1D(x, sigma);
     const val = (Math.pow(x, 2) / Math.pow(sigma, 4)) * gaussian - (1 / denom) * gaussian;
-    const beta = sigma**2 / 4 * Math.exp(0.5)* SQRT_2PI;
+    const beta = sigma ** 2 / 4 * Math.exp(0.5) * SQRT_2PI;
     return beta * Math.abs(val);
 };
 
@@ -40,7 +47,7 @@ const boxMuller = () => {
 // convert standard normal samples to scaled normal 
 const sampleGaussian = (sigma = 1.0) => sigma * boxMuller();
 
-const icdf = (x, sigma) => {
+const icdfGradGauss = (x, sigma) => {
     const term = -2 * sigma * sigma * Math.log(2 * (x > 0.5 ? 1 - x : x));
     return Math.sqrt(term);
 };
@@ -53,34 +60,50 @@ const cleanRandom = (x) => {
     return x;
 };
 
+function inverseHessCDF(sigma) {
+    // Return a function interpolate(y): given cdf interpolate the x from a table of cfd<->x
+    // Generate x values from -10*sigma to +10*sigma
+    const xRange = Array.from({ length: 2000 }, (_, i) => -10 * sigma + (20 * sigma * i) / 1999);
+    // Generate corresponding CDF values
+    const yRange = xRange.map(x => calcHessGaussian1DCDF(x, sigma));
+
+    function interpolate(y) {
+        if (y <= yRange[0]) return 0;
+        if (y >= yRange[yRange.length - 1]) return 1;
+
+        let i = yRange.findIndex(v => v > y);
+        if (i === 0) return xRange[0];
+
+        const x0 = xRange[i - 1], x1 = xRange[i];
+        const y0 = yRange[i - 1], y1 = yRange[i];
+        const t = (y - y0) / (y1 - y0);
+        return x0 + t * (x1 - x0);
+    }
+    return interpolate;
+}
+
 const getHessGaussianSamples = (n_samples, sigma, antithetic) => {
+    const icdf = inverseHessCDF(sigma);
     const samples = [];
     const f_x = [];
     const p_x = [];
     for (var i = 0; i < n_samples; i++) {
-
-        let rand = cleanRandom(Math.random());
-        let sign = rand < 0.5 ? -1.0 : 1.0;
-        let x_i = icdf(rand, sigma) * sign;
+        let rand = Math.random();
+        let x_i = icdf(rand);
         samples.push(x_i);
-
         if (antithetic) {
             let arand = 1.0 - rand;
-            sign = arand < 0.5 ? -1.0 : 1.0;
-            let ax = icdf(arand, sigma) * sign;
+            let ax = icdf(arand);
             samples.push(ax);
         }
     }
-    // calculcate sample value and pdf 
-
-    const beta = sigma**2 / 4 * Math.exp(0.5)* SQRT_2PI;
+    const beta = sigma ** 2 / 4 * Math.exp(0.5) * SQRT_2PI;
     for (let s of samples) {
         var p_xi = calcHessGaussian1DPDF(s, sigma);
-        var f_xi = p_xi/beta;
+        var f_xi = p_xi / beta;
         f_x.push(f_xi);
         p_x.push(p_xi);
     }
-
     return [samples, f_x, p_x];
 };
 
@@ -93,13 +116,13 @@ const getGradGaussianSamples = (n_samples, sigma, antithetic) => {
 
         let rand = cleanRandom(Math.random());
         let sign = rand < 0.5 ? -1.0 : 1.0;
-        let x_i = icdf(rand, sigma) * sign;
+        let x_i = icdfGradGauss(rand, sigma) * sign;
         samples.push(x_i);
 
         if (antithetic) {
             let arand = 1.0 - rand;
             sign = arand < 0.5 ? -1.0 : 1.0;
-            let ax = icdf(arand, sigma) * sign;
+            let ax = icdfGradGauss(arand, sigma) * sign;
             samples.push(ax);
         }
     }
@@ -138,7 +161,7 @@ const mcEstimate = (f_x, p_x) => {
 
 const mse = (x, y) => (x - y) ** 2;
 
-const convolve = (theta, n_samples, samples, pdfs, sigma, goal=0.0) => {
+const convolve = (theta, n_samples, samples, pdfs, sigma, goal = 0.0) => {
     const outputs = [];
     for (let i = 0; i < n_samples; i += 1) {
         const tau = samples[i];
@@ -169,7 +192,7 @@ function optimize() {
 
     sigma = parseFloat(sigmaSlider.value);
     let theta = parseFloat(thetaSlider.value);
-    let thetaFirstOrder = thetaSecondOrder = theta;	
+    let thetaFirstOrder = thetaSecondOrder = theta;
     let epochs = parseInt(epochsSlider.value);
     let stepsize = parseFloat(stepsizeSlider.value);
     let numSamples = parseInt(numSamplesSlider.value);
@@ -185,11 +208,11 @@ function optimize() {
     const updateTrace = () => {
         if (i < epochs && run_anim) {
             thetaFirstOrder = optimizeFristOrder(sigma, thetaFirstOrder, stepsize, numSamples, antithetic_checkbox.checked, gt_theta);
-            thetaSecondOrder = optimizeFristOrder(sigma, thetaSecondOrder, stepsize*5, numSamples, antithetic_checkbox.checked, gt_theta);
+            thetaSecondOrder = optimizeFristOrder(sigma, thetaSecondOrder, stepsize * 5, numSamples, antithetic_checkbox.checked, gt_theta);
             let costFirstOrder = mse(stepEdge(thetaFirstOrder), gt_theta);
             let costSecondOrder = mse(stepEdge(thetaSecondOrder), gt_theta);
             update_trajectory([thetaFirstOrder, stepEdge(thetaFirstOrder), costFirstOrder,
-                               thetaSecondOrder, stepEdge(thetaSecondOrder), costSecondOrder
+                thetaSecondOrder, stepEdge(thetaSecondOrder), costSecondOrder
             ]);
             text_epochs.value = 'Current Epoch: ' + (i + 1).toString();
             text_cost.value = 'Current Cost: ' + costFirstOrder.toString() + '.0';
@@ -205,7 +228,7 @@ function optimize() {
 }
 
 
-const update_trajectory = (values) =>{
+const update_trajectory = (values) => {
     const ID1st = 2;
     const ID2nd = 3;
     const trajFirstOrder = plot.data[2];
@@ -220,7 +243,7 @@ const update_trajectory = (values) =>{
     yData2nd.push(values[4]);
     Plotly.update('plot', { x: [xData1st], y: [yData1st] }, {}, ID1st);
     Plotly.update('plot', { x: [xData2nd], y: [yData2nd] }, {}, ID2nd);
-    update_triangle([values[0],values[3]]);
+    update_triangle([values[0], values[3]]);
 }
 
 
@@ -324,7 +347,7 @@ const trajectoryFirstOrder = {
     type: 'scatter',
     mode: 'markers',
     marker: { color: 'lime', size: 12, line: { color: 'grey', width: 1 } }
-};const trajectorySecondOrder = {
+}; const trajectorySecondOrder = {
     x: [defaults.theta],
     y: [1.0],
     name: 'Triangle Center Second Order',
@@ -496,7 +519,7 @@ function update_triangle(theta = null) {
     var tripath1st = theta_to_triPath_tall(thetaFirstOrder);
     var tripath2nd = theta_to_triPath_low(thetaSecondOrder);
     var update = { 'shapes[0].path': tripath1st };
-    var update2 = {'shapes[1].path': tripath2nd };
+    var update2 = { 'shapes[1].path': tripath2nd };
     Plotly.relayout('plot3', update);
     Plotly.relayout('plot3', update2);
 }
