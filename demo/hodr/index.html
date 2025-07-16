@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="plot-container-wrapper">
+        <div id="left-plot-container">
+        <div class="slider-container">       <!-- the slider container-->
+            <div style="display: flex; margin-top: 10px">
+                <input type="text" class="textbox" id="epoch_text" value="Current Epoch: 0">
+            </div>
+            <div style="display: flex">
+                <input type="text" class="textbox" id="cost_text" value="Current Cost: 1.0">
+            </div>
+            <div>
+                <div id="plot2" style="width: 100%;"></div>
+                <div id="plot4" style="width: 100%;"></div>
+            </div>
+            _______________________________________
+            <div style="display: flex">
+            <label for="sigma">Sigma:</label>
+            <input class="slider" type="range" min="0.33" max="2.5" step="0.01" value="1" id="sigma">
+            </div>
+            <div style="display: flex">
+            <label for="num-samples">Num Samples:</label>
+            <input class="slider" type="range" min="2" max="100" step="2" value="10" id="num-samples">
+            </div>
+            <div style="display: flex">
+            <label for="theta">Theta:</label>
+            <input class="slider" type="range" min="-4" max="4.0" step="0.1" value="-1.8" id="theta">
+            </div>
+            <div style="display: flex">
+            <label for="stepsize">StepSize:</label>
+            <input class="slider" type="range" min="0.001" max="0.5" step="0.01" value="0.1" id="stepsize">
+            </div>
+            <div style="display: flex">
+            <label for="epochs">Epochs:</label>
+            <input class="slider" type="range" min="10" max="700" step="1" value="200" id="epochs">
+            </div>
+            <div style="display: flex">
+                <input type="checkbox" id="cb_antithetic" checked>
+                <div style="margin-left: 10px;">Antithetic?</div>
+            </div>
+            <div style="display: flex">
+                <input type="checkbox" id="cb_showsmoothed">
+                <div style="margin-left: 10px;">Show Smooth?</div>
+            </div>
+            <div style="display: flex;">
+            <button style="float: left; margin-top: 14px;" onclick="optimize()">Run Optimization</button>
+            <button style="float: left; margin-left: 10px; margin-top: 14px;" onclick="stop_anim()">Stop</button>
+            <button style="float: left; margin-left: 10px; margin-top: 14px;" onclick="reset()">Reset</button>
+            </div>
+        </div>
+        </div>
+        <div id="right-plot-container">
+        <div id="plot" class="js-plotly-plot"></div>
+        <div id="plot3"></div>
+        </div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="demo.js"></script>
+</body>
+</html>

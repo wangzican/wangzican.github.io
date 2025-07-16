@@ -67,18 +67,18 @@ We derive methods to compute higher order differentials (Hessians and Hessian-ve
 </p>
 
 <b>Interactive Demo</b><br>
-Coming soon!
-<!-- <p style="text-align: justify">
+
+<p style="text-align: justify">
 Below is an interactive 1D example which uses our method to differentiate through a discontinuous step function. The task here 
 is to move the triangle center (parameterized by theta), such that it covers the black pixel at the bottom. The plateaus in the cost landscape 
 come from the fact that the error between the pixel's desired and its current color does not take into account how "far away" the triangle is 
 when it's not overlapping the pixel. We can smoothen these plateaus by our proposed convolution with a Gaussian kernel (displayed in plot in the right bottom corner, click 'Show Smooth' to see the convolved function). 
 We then sample this convoluted space and use the samples to drive a gradient descent that moves the initial 
 parameter (green) towards the region of zero cost, i.e., such that the triangle overlaps the pixel. <br>
-</p>-->
-{% comment %}
-{% include hodr_example.md %} 
-{% endcomment %}
+</p>
+
+<iframe src="/demo/hodr/index.html" width="100%" height="700px" style="border: none;"></iframe>
+
 <!-- 
 <br>
 <p style="text-align: justify">
@@ -114,6 +114,8 @@ If you find our work useful and use parts or ideas of our paper or code, please 
 
 <p style="text-align: justify">
 <b>Acknowledgements</b><br>
-Our approach is heavily based on the PRDPT paper by <a href="https://mfischer-ucl.github.io/">Michael Fischer</a> and <a href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a>. With additional higher order optimization and sampling schemme. Please check out the original paper <a href="https://mfischer-ucl.github.io/prdpt/">here</a>.</p>
+Our approach is based on the PRDPT paper by <a href="https://mfischer-ucl.github.io/">Michael Fischer</a> and <a href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a>. With additional higher order optimization and sampling schemme. Please check out the original paper <a href="https://mfischer-ucl.github.io/prdpt/">here</a>.</p>
 </div>
 </body>
+
+
