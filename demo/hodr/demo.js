@@ -36,6 +36,10 @@ const gradGaussianKernel = (x, sigma) => {
     return -(x / (sigma * sigma)) * calcGaussian1D(x, sigma);
 };
 
+const hessGaussianKernel1D = (x, sigma) => {
+    return (Math.pow(x, 2) / Math.pow(sigma, 4)) * calcGaussian1D(x, sigma) - (1 / denom) * calcGaussian1D(x, sigma);
+};
+
 const getPDF = (x, sigma) => 0.5 * sigma * SQRT_2PI * x;
 
 
@@ -106,7 +110,6 @@ const getHessGaussianSamples = (n_samples, sigma, antithetic) => {
     }
     return [samples, f_x, p_x];
 };
-
 
 const getGradGaussianSamples = (n_samples, sigma, antithetic) => {
     const samples = [];
@@ -199,10 +202,10 @@ function optimize() {
 
     run_anim = true;
     let gt_theta = 0.0;
-    Plotly.update('plot', { x: [[thetaFirstOrder]], y: [[stepEdge(thetaFirstOrder)]] }, {}, 2);
-    Plotly.update('plot', { visible: true }, {}, 2);
-    Plotly.update('plot', { x: [[thetaSecondOrder]], y: [[stepEdge(thetaSecondOrder)]] }, {}, 3);
+    Plotly.update('plot', { x: [[thetaFirstOrder]], y: [[stepEdge(thetaFirstOrder)]] }, {}, 3);
     Plotly.update('plot', { visible: true }, {}, 3);
+    Plotly.update('plot', { x: [[thetaSecondOrder]], y: [[stepEdge(thetaSecondOrder)]] }, {}, 4);
+    Plotly.update('plot', { visible: true }, {}, 4);
 
     let i = 0;
     const updateTrace = () => {
@@ -215,7 +218,8 @@ function optimize() {
                 thetaSecondOrder, stepEdge(thetaSecondOrder), costSecondOrder
             ]);
             text_epochs.value = 'Current Epoch: ' + (i + 1).toString();
-            text_cost.value = 'Current Cost: ' + costFirstOrder.toString() + '.0';
+            text_cost.value = 'Current Cost first order (grey): ' + costFirstOrder.toString() + '.0';
+            text_cost2.value = 'Current Cost second order (blue): ' + costSecondOrder.toString() + '.0';
 
             // make timeout so that display is able to react 
             setTimeout(updateTrace, 5);
@@ -318,9 +322,16 @@ const sampleTrace_gg = {
 const smoothedFn = {
     x: [],
     y: [],
-    name: 'Smoothed',
+    name: 'Smoothed with gradient samples',
     type: 'scatter',
-    marker: { color: 'rgb(255, 0, 255)' }
+    marker: { color: 'grey' }
+};
+const smoothedFn2 = {
+    x: [],
+    y: [],
+    name: 'Smoothed with Hessian samples',
+    type: 'scatter',
+    marker: { color: 'blue' }
 };
 const verticalZero = {
     x: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -346,7 +357,7 @@ const trajectoryFirstOrder = {
     name: 'Triangle Center First Order',
     type: 'scatter',
     mode: 'markers',
-    marker: { color: 'lime', size: 12, line: { color: 'grey', width: 1 } }
+    marker: { color: 'grey', size: 12, line: { color: 'grey', width: 1 } }
 }; const trajectorySecondOrder = {
     x: [defaults.theta],
     y: [1.0],
@@ -372,7 +383,16 @@ const layout = {
              layer: 'below',
              line: {width: 0}}],*/
 };
-const layoutLower = {
+const layoutLower1 = {
+    title: 'Gradient Samples',
+    xaxis: { title: '', 'range': [-5, 5] },
+    yaxis: { title: '', 'range': [-0.1, 1.2] },
+    legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
+    margin: { t: 10, b: 10, l: 25, r: 10 },
+    autosize: true,
+};
+const layoutLower2 = {
+    title: 'Hessian Samples',
     xaxis: { title: '', 'range': [-5, 5] },
     yaxis: { title: '', 'range': [-0.1, 1.2] },
     legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
@@ -392,7 +412,7 @@ const layoutPxPlot = {
         path: 'M 0 0 L 1 0.6 L 2 0 Z',
         xref: 'x',
         yref: 'y',
-        fillcolor: 'lime',
+        fillcolor: 'grey',
         opacity: 0.6,
         line: { width: 1 }
     },
@@ -421,20 +441,21 @@ const layoutPxPlot = {
 const config = { responsive: true }
 
 Plotly.newPlot('plot', [stepTrace,
-    smoothedFn,
+    smoothedFn, smoothedFn2,
     trajectoryFirstOrder, trajectorySecondOrder], layout, config);
 Plotly.newPlot('plot2', [gaussianTrace,
     gradGaussianTrace,
     sampleTrace,
-    sampleTrace_gg, verticalZero], layoutLower, config);
+    sampleTrace_gg, verticalZero], layoutLower1, config);
 Plotly.newPlot('plot4', [gaussianTrace,
     hessGaussianTrace,
     sampleTrace,
-    sampleTrace_gg, verticalZero], layoutLower, config);
+    sampleTrace_gg, verticalZero], layoutLower2, config);
 Plotly.newPlot('plot3', [pxTrace], layoutPxPlot, config);
 
 function reset_textboxes() {
-    text_cost.value = 'Current Cost: 1.0';
+    text_cost.value = 'Current Cost first order (grey): 1.0';
+    text_cost2.value = 'Current Cost second order (blue): 1.0';
     text_epochs.value = 'Current Epoch: 0';
 }
 
@@ -460,6 +481,7 @@ var smoothed_checkbox = document.getElementById('cb_showsmoothed');
 var antithetic_checkbox = document.getElementById('cb_antithetic');
 
 var text_cost = document.getElementById('cost_text')
+var text_cost2 = document.getElementById('cost_text2')
 var text_epochs = document.getElementById('epoch_text')
 
 reset(incl_plots = false); 		// set default values to sliders 
@@ -526,18 +548,23 @@ function update_triangle(theta = null) {
 
 function update_plots(resample = true) {
 
-    if (!smoothed_checkbox.checked) { Plotly.update('plot', { visible: false }, {}, 1); }
-    else { Plotly.update('plot', { visible: true }, {}, 1); }
+    if (!smoothed_checkbox.checked) { 
+        Plotly.update('plot', { visible: false }, {}, 1); 
+        Plotly.update('plot', { visible: false }, {}, 2);
+    } else { 
+        Plotly.update('plot', { visible: true }, {}, 1); 
+        Plotly.update('plot', { visible: true }, {}, 2);
+    }
 
     sigma = parseFloat(sigmaSlider.value);
     var theta_init = parseFloat(thetaSlider.value);
     var numSamples = parseInt(numSamplesSlider.value);
 
     // remove (potential) trajectory 
-    Plotly.update('plot', { visible: true }, {}, 2);
-    Plotly.update('plot', { x: [[theta_init]], y: [[stepEdge(theta_init)]] }, {}, 2);
     Plotly.update('plot', { visible: true }, {}, 3);
     Plotly.update('plot', { x: [[theta_init]], y: [[stepEdge(theta_init)]] }, {}, 3);
+    Plotly.update('plot', { visible: true }, {}, 4);
+    Plotly.update('plot', { x: [[theta_init]], y: [[stepEdge(theta_init)]] }, {}, 4);
 
     // update gaussian plots: for gradgaussian, plot pdf, to have same scale easier 
     for (var i = 0; i < x.length; i++) {
@@ -571,24 +598,30 @@ function update_plots(resample = true) {
 
         // go through all x's, for every x make a "smoothed" y-val by sampling N pts from the current
         // x coordinate, and then query and avg their fn val 
-        var smoothed = []
+        const smoothed = []
+        const smoothed2 = []
         for (var i = 0; i < x.length; i += 1) {
-            var theta = x[i]		// go from -5 to 5 
+            const theta = x[i]		// go from -5 to 5 
 
             // we concolve with the Gaussian, not the grad.gaussian! 
             //const [xg, yg, pdf_g] = getGradGaussianSamples(nsamples_real, sigma, antithetic_checkbox.checked);
             const [xg, yg] = getGaussianSamples(nsamples_real, sigma, antithetic_checkbox.checked);
-
-            var fn_avg; fn_avg = 0.0;
-            for (var j = 0; j < xg.length; j += 1) {
-                var theta_perturbed = theta - xg[j];
+            const [xg2, yg2] = getGaussianSamples(nsamples_real, sigma, antithetic_checkbox.checked);
+            let fn_avg; fn_avg = 0.0;
+            let fn_avg2; fn_avg2 = 0.0;
+            for (let j = 0; j < xg.length; j += 1) {
+                let theta_perturbed = theta - xg[j];
+                let theta_perturbed2 = theta - xg2[j];
                 fn_avg += stepEdge(theta_perturbed);
+                fn_avg2 += stepEdge(theta_perturbed2);
             }
 
             smoothed.push(fn_avg / numSamples);
+            smoothed2.push(fn_avg2 / numSamples);
         }
 
         Plotly.update('plot', { x: [x], y: [smoothed] }, {}, 1);
+        Plotly.update('plot', { x: [x], y: [smoothed2] }, {}, 2);
     }
 }
 

@@ -6,10 +6,10 @@ author_profile: false
 layout: mylayout # default is single in _config.yml
 
 # Info
-title: "Higher-Order Differentiable Rendering"
+title: "Stochastic Gradient Estimation for Higher-order Differentiable Rendering"
 show_title: false
 authors:
-  - name: "Robert(Zican) Wang"
+  - name: "Zican Wang"
     # url: "https://wangzican.github.io/"
   - name: "Michael Fischer"
     url: "https://mfischer-ucl.github.io/"
@@ -31,7 +31,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
 <div class="grey-box" style="max-width: 800px; margin: 0 auto; padding: 20px;">
 <br>
     <p style="margin: 0 auto; text-align: center;">
-    <span style="font-size: 24px;"><b>Higher order differentiable rendering</b></span> <br><br>
+    <span style="font-size: 24px;"><b>Stochastic Gradient Estimation for Higher-order Differentiable Rendering</b></span> <br><br>
     <span style="font-size: 17px; color: black">arXiv preprint</span><br><br>
     <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Robert(Zican) Wang</a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer</a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a></span><br>
     <a style="font-size: 14px;" class="hiddenlink" href="https://www.ucl.ac.uk/">University College London</a>
@@ -60,7 +60,9 @@ pdf: 'https://arxiv.org/abs/2412.03489'
 
 <b>Abstract</b><br>
 <p style="text-align: justify">
-We derive methods to compute higher order differentials (Hessians and Hessian-vector products) of the rendering operator. Our approach is based on importance sampling of a convolution that represents the differentials of rendering parameters and shows to be applicable to both rasterization and path tracing. We further suggest an aggregate sampling strategy to importance-sample multiple dimensions of one convolution kernel simultaneously. We demonstrate that this information improves convergence when used in higher-order optimizers such as Newton or Conjugate Gradient relative to a gradient descent baseline in several inverse rendering tasks.</p>
+We derive methods to compute higher order differentials(Hessians and Hessian-vector products) of the rendering
+operator. Our approach is based on importance sampling of a convolution that represents the differentials of rendering parameters and shows to be applicable to both rasterization and path tracing. We further suggest an aggregate sampling strategy to importance-sample multiple dimensions of one convolution kernel simultaneously. We demonstrate that this information improves convergence when used in higher-order optimizers such as Newton or Conjugate Gradient relative to a gradient descent baseline in several inverse rendering tasks.
+</p>
 
 <p align="center">
  <img src="/images/higherorder/concept.png" width="100%" margin-top="50px" />
@@ -114,7 +116,7 @@ If you find our work useful and use parts or ideas of our paper or code, please 
 
 <p style="text-align: justify">
 <b>Acknowledgements</b><br>
-Our approach is based on the PRDPT paper by <a href="https://mfischer-ucl.github.io/">Michael Fischer</a> and <a href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a>. With additional higher order optimization and sampling schemme. Please check out the original paper <a href="https://mfischer-ucl.github.io/prdpt/">here</a>.</p>
+Our approach is based on the PRDPT paper by <a href="https://mfischer-ucl.github.io/">Michael Fischer</a> and <a href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a>. With additional higher order optimization and sampling scheme. Please check out the original paper <a href="https://mfischer-ucl.github.io/prdpt/">here</a>.</p>
 </div>
 </body>
 

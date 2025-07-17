@@ -28,7 +28,7 @@
 }
 #plot2 {
     width: 100%;
-    aspect-ratio: 2 / 1.09;
+    aspect-ratio: 2 / 1;
 }
 #plot3 {
     width: 100%;
@@ -36,7 +36,7 @@
 }
 #plot4 {
     width: 100%;
-    aspect-ratio: 2 / 1.09;
+    aspect-ratio: 2 / 1;
 }
 #plot5 {
     width: 100%;
@@ -61,6 +61,7 @@
     box-shadow: inset 0px 0px 0px 0px black; 
     border: none; 
     background-color: transparent;
+    flex: 1 1 0;
 }
 
 @media screen and (max-width: 768px) {
