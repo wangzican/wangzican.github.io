@@ -231,12 +231,12 @@ function optimize() {
     updateTrace();
 }
 
-
+const main_plot = document.getElementById('plot');
 const update_trajectory = (values) => {
-    const ID1st = 2;
-    const ID2nd = 3;
-    const trajFirstOrder = plot.data[2];
-    const trajSecondOrder = plot.data[3];
+    const ID1st = 3;
+    const ID2nd = 4;
+    const trajFirstOrder = main_plot?.data?.[ID1st];
+    const trajSecondOrder = main_plot?.data?.[ID2nd];
     let xData1st = trajFirstOrder.x;
     let yData1st = trajFirstOrder.y;
     let xData2nd = trajSecondOrder.x;
@@ -388,7 +388,7 @@ const layoutLower1 = {
     xaxis: { title: '', 'range': [-5, 5] },
     yaxis: { title: '', 'range': [-0.1, 1.2] },
     legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
-    margin: { t: 10, b: 10, l: 25, r: 10 },
+    margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
 };
 const layoutLower2 = {
@@ -396,7 +396,7 @@ const layoutLower2 = {
     xaxis: { title: '', 'range': [-5, 5] },
     yaxis: { title: '', 'range': [-0.1, 1.2] },
     legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
-    margin: { t: 10, b: 10, l: 25, r: 10 },
+    margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
 };
 const layoutPxPlot = {
@@ -460,15 +460,17 @@ function reset_textboxes() {
 }
 
 function reset(incl_plots = true) {
+    stop_anim();
     sigmaSlider.value = defaults.sigma;
     thetaSlider.value = defaults.theta;
     epochsSlider.value = defaults.epochs;
     stepsizeSlider.value = defaults.stepsize;
     numSamplesSlider.value = defaults.nsamples;
-    smoothed_checkbox.checked = false;
+    // smoothed_checkbox.checked = false;
     antithetic_checkbox.checked = true;
     reset_textboxes();
     update_triangle();
+    
     if (incl_plots) update_plots();
 }
 
@@ -532,7 +534,7 @@ function theta_to_triPath_low(th) {
     return tripath;
 }
 function update_triangle(theta = null) {
-    if (theta == null) {
+    if (!Array.isArray(theta) || theta.length !== 2) {
         theta = [parseFloat(thetaSlider.value), parseFloat(thetaSlider.value)];
     }
     let thetaFirstOrder, thetaSecondOrder;

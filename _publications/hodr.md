@@ -1,6 +1,6 @@
 ---
 # page settings
-permalink: /hodr/
+permalink: /publication/hodr
 classes: wide
 author_profile: false
 layout: mylayout # default is single in _config.yml
@@ -17,7 +17,6 @@ authors:
     url: "https://www.homepages.ucl.ac.uk/~ucactri/"
 collection: publications
 category: 'Conference Papers'
-permalink: /publication/hodr
 excerpt: 'Second order optimization for black-box functions such as Path tracing'
 date: 2024-11-15
 type: 'arXiv preprint'
@@ -33,7 +32,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
     <p style="margin: 0 auto; text-align: center;">
     <span style="font-size: 24px;"><b>Stochastic Gradient Estimation for Higher-order Differentiable Rendering</b></span> <br><br>
     <span style="font-size: 17px; color: black">arXiv preprint</span><br><br>
-    <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Robert(Zican) Wang</a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer</a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a></span><br>
+    <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Zican Wang</a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer</a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a></span><br>
     <a style="font-size: 14px;" class="hiddenlink" href="https://www.ucl.ac.uk/">University College London</a>
 </p>
 <br>
