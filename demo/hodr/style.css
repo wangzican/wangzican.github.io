@@ -27,6 +27,7 @@
     height: 80%;
 }
 #plot2 {
+    flex: 1 1 0;
     width: 100%;
     aspect-ratio: 2 / 1;
 }
@@ -35,6 +36,7 @@
     height: 18%;
 }
 #plot4 {
+    flex: 1 1 0;
     width: 100%;
     aspect-ratio: 2 / 1;
 }
@@ -61,6 +63,10 @@
     flex: 1 1 0;
 }
 
+label {
+  font-family: sans-serif;
+  font-size: inherit;
+}
 @media screen and (max-width: 768px) {
     #plot-container-wrapper {
         max-width: 100%;

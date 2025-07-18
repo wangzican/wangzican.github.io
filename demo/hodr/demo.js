@@ -211,13 +211,13 @@ function optimize() {
     const updateTrace = () => {
         if (i < epochs && run_anim) {
             thetaFirstOrder = optimizeFristOrder(sigma, thetaFirstOrder, stepsize, numSamples, antithetic_checkbox.checked, gt_theta);
-            thetaSecondOrder = optimizeFristOrder(sigma, thetaSecondOrder, stepsize * 5, numSamples, antithetic_checkbox.checked, gt_theta);
+            thetaSecondOrder = optimizeFristOrder(sigma, thetaSecondOrder, stepsize * 3, numSamples*2, antithetic_checkbox.checked, gt_theta);
             let costFirstOrder = mse(stepEdge(thetaFirstOrder), gt_theta);
             let costSecondOrder = mse(stepEdge(thetaSecondOrder), gt_theta);
             update_trajectory([thetaFirstOrder, stepEdge(thetaFirstOrder), costFirstOrder,
                 thetaSecondOrder, stepEdge(thetaSecondOrder), costSecondOrder
             ]);
-            text_epochs.value = 'Current Epoch: ' + (i + 1).toString();
+            text_epochs.value = 'Current Step: ' + (i + 1).toString();
             text_cost.value = 'Current Cost first order (grey): ' + costFirstOrder.toString() + '.0';
             text_cost2.value = 'Current Cost second order (blue): ' + costSecondOrder.toString() + '.0';
 
@@ -252,7 +252,8 @@ const update_trajectory = (values) => {
 
 
 defaults = { 'sigma': 1.0, 'nsamples': 10, 'epochs': 600, 'stepsize': 0.1, 'theta': -2.0 };
-
+const FirstOrderColor = 'rgb(234,65,54)';
+const SecondOrderColor = 'rgb(104,180,249)';
 // Define the data for the Gaussian distribution
 let x = [], y_gauss = [], y_gradgauss = [], y_step = [], sigma = 1;
 let y_hessgauss = [];
@@ -324,14 +325,14 @@ const smoothedFn = {
     y: [],
     name: 'Smoothed with gradient samples',
     type: 'scatter',
-    marker: { color: 'grey' }
+    marker: { color: FirstOrderColor }
 };
 const smoothedFn2 = {
     x: [],
     y: [],
     name: 'Smoothed with Hessian samples',
     type: 'scatter',
-    marker: { color: 'blue' }
+    marker: { color: SecondOrderColor }
 };
 const verticalZero = {
     x: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -357,20 +358,21 @@ const trajectoryFirstOrder = {
     name: 'Triangle Center First Order',
     type: 'scatter',
     mode: 'markers',
-    marker: { color: 'grey', size: 12, line: { color: 'grey', width: 1 } }
+    marker: { color: FirstOrderColor, size: 12, line: { color: FirstOrderColor, width: 1 } }
 }; const trajectorySecondOrder = {
     x: [defaults.theta],
     y: [1.0],
     name: 'Triangle Center Second Order',
     type: 'scatter',
     mode: 'markers',
-    marker: { color: 'blue', size: 4, line: { color: 'grey', width: 1 } }
+    marker: { color: SecondOrderColor, size: 4, line: { color: SecondOrderColor, width: 1 } }
 };
 const layout = {
     title: '1D Example: Differentiating Through Plateaus',
-    xaxis: { title: 'x', 'range': [-5, 5], zeroline: false },
-    yaxis: { title: 'y', 'range': [-0.1, 1.2] },
-    legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
+    xaxis: { title: 'Theta', 'range': [-5, 5], zeroline: false},
+    yaxis: { title: 'Cost', 'range': [-0.1, 1.5] },
+    legend: { orientation: 'v', y: 1.0, xanchor: 'right', x: 1.0 },
+    margin: { t: 60, b: 60, l: 45, r: 45 },
     /*shapes: [{type: 'rect',
              xref: 'x',
              yref: 'paper',
@@ -386,21 +388,21 @@ const layout = {
 const layoutLower1 = {
     title: 'Gradient Samples',
     xaxis: { title: '', 'range': [-5, 5] },
-    yaxis: { title: '', 'range': [-0.1, 1.2] },
-    legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
+    yaxis: { title: '', 'range': [-0.1, 0.6] },
+    legend: { orientation: 'h', y: -0.25, xanchor: 'center', x: 0.5 },
     margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
 };
 const layoutLower2 = {
     title: 'Hessian Samples',
     xaxis: { title: '', 'range': [-5, 5] },
-    yaxis: { title: '', 'range': [-0.1, 1.2] },
-    legend: { orientation: 'h', y: 0.0, xanchor: 'center', x: 0.5 },
+    yaxis: { title: '', 'range': [-0.1, 0.6] },
+    legend: { orientation: 'h', y: -0.25, xanchor: 'center', x: 0.5 },
     margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
 };
 const layoutPxPlot = {
-    xaxis: { title: '', 'range': [-5, 5], zeroline: false, showgrid: false },
+    xaxis: { title: 'Theta', 'range': [-5, 5], zeroline: false, showgrid: false },
     yaxis: {
         title: '', 'range': [-0.2, 0.7], showgrid: false, tickmode: 'array', tickvals: [0],
         showticklabels: false
@@ -412,8 +414,8 @@ const layoutPxPlot = {
         path: 'M 0 0 L 1 0.6 L 2 0 Z',
         xref: 'x',
         yref: 'y',
-        fillcolor: 'grey',
-        opacity: 0.6,
+        fillcolor: FirstOrderColor,
+        opacity: 1.0,
         line: { width: 1 }
     },
     {
@@ -421,8 +423,8 @@ const layoutPxPlot = {
         path: 'M 0 0 L 0.1 0.4 L 2 0 Z',
         xref: 'x',
         yref: 'y',
-        fillcolor: 'blue',
-        opacity: 0.6,
+        fillcolor: SecondOrderColor,
+        opacity: 1.0,
         line: { width: 1 }
     },
     {
@@ -430,9 +432,9 @@ const layoutPxPlot = {
         xref: 'x',
         yref: 'y',
         x0: 0.80,
-        y0: 0.0,
-        x1: 1.2,
-        y1: 0.2,
+        y0: 0.1,
+        x1: 1.0,
+        y1: 0.15,
         fillcolor: 'grey',
         opacity: 0.6,
         line: { width: 1 }
@@ -456,7 +458,7 @@ Plotly.newPlot('plot3', [pxTrace], layoutPxPlot, config);
 function reset_textboxes() {
     text_cost.value = 'Current Cost first order (grey): 1.0';
     text_cost2.value = 'Current Cost second order (blue): 1.0';
-    text_epochs.value = 'Current Epoch: 0';
+    text_epochs.value = 'Current Step: 0';
 }
 
 function reset(incl_plots = true) {
@@ -486,7 +488,7 @@ var text_cost = document.getElementById('cost_text')
 var text_cost2 = document.getElementById('cost_text2')
 var text_epochs = document.getElementById('epoch_text')
 
-reset(incl_plots = false); 		// set default values to sliders 
+reset(); 		// set default values to sliders 
 
 var run_anim = false;
 
