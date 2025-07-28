@@ -32,8 +32,8 @@ pdf: 'https://arxiv.org/abs/2412.03489'
     <p style="margin: 0 auto; text-align: center;">
     <span style="font-size: 24px;"><b>Stochastic Gradient Estimation for Higher-order Differentiable Rendering</b></span> <br><br>
     <span style="font-size: 17px; color: black">arXiv preprint</span><br><br>
-    <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Zican Wang</a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer</a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel</a></span><br>
-    <a style="font-size: 14px;" class="hiddenlink" href="https://www.ucl.ac.uk/">University College London</a>
+    <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Zican Wang<sup>1</sup></a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer<sup>1,2</sup></a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel<sup>1</sup></a></span><br>
+    <a style="font-size: 14px;" class="hiddenlink" href="https://www.ucl.ac.uk/"><sup>1</sup>University College London</a>, <a style="font-size: 14px;" class="hiddenlink" href="https://research.adobe.com/"><sup>2</sup>Adobe Research</a>
 </p>
 <br>
 </div>
