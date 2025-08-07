@@ -325,6 +325,7 @@ const smoothedFn = {
     y: [],
     name: 'Smoothed with gradient samples',
     type: 'scatter',
+    opacity: 0.5,
     marker: { color: FirstOrderColor }
 };
 const smoothedFn2 = {
@@ -332,6 +333,7 @@ const smoothedFn2 = {
     y: [],
     name: 'Smoothed with Hessian samples',
     type: 'scatter',
+    opacity: 0.5,
     marker: { color: SecondOrderColor }
 };
 const verticalZero = {
@@ -388,7 +390,7 @@ const layout = {
 const layoutLower1 = {
     title: 'Gradient Samples',
     xaxis: { title: '', 'range': [-5, 5] },
-    yaxis: { title: '', 'range': [-0.1, 0.6] },
+    yaxis: { title: '', 'range': [-0.1, 1.1] },
     legend: { orientation: 'h', y: -0.25, xanchor: 'center', x: 0.5 },
     margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
@@ -396,7 +398,7 @@ const layoutLower1 = {
 const layoutLower2 = {
     title: 'Hessian Samples',
     xaxis: { title: '', 'range': [-5, 5] },
-    yaxis: { title: '', 'range': [-0.1, 0.6] },
+    yaxis: { title: '', 'range': [-0.1, 1.1] },
     legend: { orientation: 'h', y: -0.25, xanchor: 'center', x: 0.5 },
     margin: { t: 45, b: 10, l: 25, r: 10 },
     autosize: true,
