@@ -63,7 +63,7 @@ We derive methods to compute higher order differentials(Hessians and Hessian-vec
 operator. Our approach is based on importance sampling of a convolution that represents the differentials of rendering parameters and shows to be applicable to both rasterization and path tracing. We further suggest an aggregate sampling strategy to importance-sample multiple dimensions of one convolution kernel simultaneously. We demonstrate that this information improves convergence when used in higher-order optimizers such as Newton or Conjugate Gradient relative to a gradient descent baseline in several inverse rendering tasks.
 </p>
 
-<p align="center">
+<p style="text-align: center;">
  <img src="/images/higherorder/concept.png" width="100%" margin-top="50px" />
 </p>
 
@@ -88,14 +88,58 @@ and hence does not need all the scene config / rendering infrastructure used in 
 </div> -->
 
 <br>
+<b>Derivation and sampling</b>
+<br>
+<p style="text-align: justify">
+The derivative is positivized
+</p>
+<br>
+<figure>
+  <img src="/images/higherorder/DetailDerivation.png" 
+       alt="Detailed derivation" 
+       height="200">
+</figure>
+
+<br>
 
 <b>Results</b><br>
-
-<img src="/images/higherorder/banana.gif" alt="banana" width="200px">
-<img src="/images/higherorder/bananaGT.png" alt="bananaGT" width="200px">
 <br>
-<img src="/images/higherorder/suzanne.gif" alt="Suzanne" width="200px">
-<img src="/images/higherorder/SuzanneGT.jpg" alt="SuzanneGT" width="200px">
+<figure>
+  <img src="/images/higherorder/table_test.png" alt="table_test" width="100%">
+</figure>
+<br>
+
+<div class="image-row">
+  <figure>
+    <img src="/images/higherorder/banana.gif" alt="banana" width="200">
+    <figcaption>First order</figcaption>
+  </figure>
+  <figure>
+    <img src="/images/higherorder/banana.gif" alt="banana" width="200">
+    <figcaption>OurHVP</figcaption>
+  </figure>
+  <figure>
+    <img src="/images/higherorder/bananaGT.png" alt="bananaGT" width="200">
+    <figcaption>Ground truth</figcaption>
+  </figure>
+</div>
+<br>
+<div class="image-row">
+  <figure>
+    <img src="/images/higherorder/suzanne.gif" alt="suzanne" width="200">
+    <figcaption>First order</figcaption>
+  </figure>
+  <figure>
+    <img src="/images/higherorder/suzanne.gif" alt="suzanne" width="200">
+    <figcaption>OurHVP</figcaption>
+  </figure>
+  <figure>
+    <img src="/images/higherorder/SuzanneGT.jpg" alt="suzanneGT" width="200">
+    <figcaption>Ground truth</figcaption>
+  </figure>
+</div>
+
+
 
 
 <br>

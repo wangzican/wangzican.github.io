@@ -164,11 +164,25 @@ const mcEstimate = (f_x, p_x) => {
 
 const mse = (x, y) => (x - y) ** 2;
 
-const convolve = (theta, n_samples, samples, pdfs, sigma, goal = 0.0) => {
+const convolveFirstOrder = (theta, n_samples, samples, pdfs, sigma, goal = 0.0) => {
     const outputs = [];
     for (let i = 0; i < n_samples; i += 1) {
         const tau = samples[i];
         const w = gradGaussianKernel(tau, sigma);
+        const fn = stepEdge(theta - tau);
+        const weighted_fn_val = mse(fn, goal) * w;
+        outputs.push(weighted_fn_val);
+    }
+
+    var final_estimate = mcEstimate(outputs, pdfs);
+    return final_estimate;
+};
+
+const convolveSecondOrder = (theta, n_samples, samples, pdfs, sigma, goal = 0.0) => {
+    const outputs = [];
+    for (let i = 0; i < n_samples; i += 1) {
+        const tau = samples[i];
+        const w = hessGaussianKernel1D(tau, sigma);
         const fn = stepEdge(theta - tau);
         const weighted_fn_val = mse(fn, goal) * w;
         outputs.push(weighted_fn_val);
@@ -184,11 +198,21 @@ const optimizeFristOrder = (sigma, theta, stepsize, numSamples, antithetic, gt_t
     let nsamples_real = antithetic ? Math.round(numSamples / 2.0) : numSamples;
     // get gradient by convolving and multiplying by kernel: 
     const [x_i, f_xi, p_xi] = getGradGaussianSamples(numSamples, sigma, antithetic);
-    const grad = convolve(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
+    const grad = convolveFirstOrder(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
     // GD
     theta -= stepsize * grad;
     return theta;
 };
+
+const optimizeSecondOrder = (sigma, theta, stepsize, numSamples, antithetic, gt_theta) => {
+    let nsamples_real = antithetic ? Math.round(numples / 2.0) : numSamples;
+    // get hessian by convolving and multiplying by kernel:
+    const [x_i, f_xi, p_xi] = getHessGaussianSamples(numSamples, sigma, antithetic);
+    const hess = convolve(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
+    // GD
+    theta -= stepsize * hess;
+    return theta;
+}
 
 function optimize() {
     if (run_anim) { return; }		// avoid double-running, e.g., when button is clicked while anim is running 

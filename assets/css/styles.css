@@ -77,6 +77,32 @@
 }
 
 
+.image-row {
+    height: auto;
+    display: flex;
+    justify-content: space-around; /* even spacing */
+    align-items: flex-start;        /* keep top edges aligned */
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /* border-top: 100px;
+    border-bottom: 100px; */
+    gap: 30px;                      /* optional extra space */
+}
+
+figure {
+  flex: 1 1 0;
+  margin: 0;
+  text-align: center;
+}
+
+figcaption {
+    text-align: center;
+    margin-top: 0px;
+    font-size: 14px;
+    color: #e71818;
+}
+
+
 /* Media query for tablets */
 @media (max-width: 768px) {
   .teaserbutton {
