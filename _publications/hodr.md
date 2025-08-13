@@ -91,7 +91,17 @@ and hence does not need all the scene config / rendering infrastructure used in 
 <b>Derivation and sampling</b>
 <br>
 <p style="text-align: justify">
-The derivative is positivized
+The Hessian of a multivariate Gaussian function describes the second-order partial derivatives of that function. For sampling a diagonal Gaussian Hessian, we can use inverse transform sampling via the Smirnov transform. To allow sampling with this method, the 2nd order derivative is positivized and normalized in to a probability density function. Since the curvature of the Gaussian is the derivative of its gradient, we can get the CDF by scaling and combining the gradient of the Gaussian. 
+
+For a off-diagonal entry \( H_{ij}(x) \) in the Hessian matrix is given by:
+\[
+H_{ij}(x) = \frac{\partial^2 f}{\partial x_i \partial x_j}
+\]
+Because the multivariate Gaussian is separable, each Hessian component decomposes as follows:
+<br>
+- The second derivative of the 1D Gaussian in \(x_i\) and \(x_j\)
+<br>
+- Times the Gaussian (unchanged) in the other dimensions.
 </p>
 <br>
 <figure>
@@ -102,7 +112,12 @@ The derivative is positivized
 
 <br>
 
-<b>Results</b><br>
+<b>Results</b>
+<br>
+<p style="text-align: justify">
+Quantitative results of different methods on different tasks (rows) and their convergence plots. We report convergence time in wall-clock units, in ratio to the overall best method, OurHVPA. In the numerical columns, .9 and .99 report the time taken to achieve 90 and 99% error reduction from the initial starting configuration, respectively, while the bar plots graphically show these findings. The line plots report image- and parameter-space convergence in the left and right column, respectively, on a log-log scale.
+Methods:
+</p>
 <br>
 <figure>
   <img src="/images/higherorder/table_test.png" alt="table_test" width="100%">
@@ -111,7 +126,7 @@ The derivative is positivized
 
 <div class="image-row">
   <figure>
-    <img src="/images/higherorder/banana.gif" alt="banana" width="200">
+    <img src="/images/500x300.png" alt="banana" width="200">
     <figcaption>First order</figcaption>
   </figure>
   <figure>
@@ -126,7 +141,7 @@ The derivative is positivized
 <br>
 <div class="image-row">
   <figure>
-    <img src="/images/higherorder/suzanne.gif" alt="suzanne" width="200">
+    <img src="/images/500x300.png" alt="suzanne" width="200">
     <figcaption>First order</figcaption>
   </figure>
   <figure>
