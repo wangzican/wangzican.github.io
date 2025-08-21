@@ -47,7 +47,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
                 </a>
             </li>
             <li class="horizItem">
-                <a href="/files/Higher_order_differentiable_rendering_supplementary.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf">
+                <a href="https://arxiv.org/abs/2412.03489" download="Higher_order_differentiable_rendering_supplementary.pdf">
                 <img class="teaserbutton" src="/images/icons/clip.png" ><br>
                     <h4><strong>Supplemental</strong></h4>
                 </a>
