@@ -41,13 +41,13 @@ pdf: 'https://arxiv.org/abs/2412.03489'
     <div style="display: inline">
         <ul style="list-style: none; text-align: center">
             <li class="horizItem">
-                <a href="/files/Higher_order_differentiable_rendering.pdf" download="Higher_order_differentiable_rendering.pdf">
+                <a href="https://arxiv.org/pdf/2412.03489" download="Higher_order_differentiable_rendering.pdf">
                 <img class="teaserbutton" src="/images/higherorder/front_page.png" ><br>
                     <h4><strong>Paper</strong></h4>
                 </a>
             </li>
             <li class="horizItem">
-                <a href="https://arxiv.org/abs/2412.03489" download="Higher_order_differentiable_rendering_supplementary.pdf">
+                <a href="files/ICCV_2025_Stochastic_Estimation_for_Higher_order_Differentiable_Rendering_Part2.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf">
                 <img class="teaserbutton" src="/images/icons/clip.png" ><br>
                     <h4><strong>Supplemental</strong></h4>
                 </a>
