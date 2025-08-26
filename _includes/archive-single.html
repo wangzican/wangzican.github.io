@@ -51,6 +51,10 @@
       {% if post.pdf %}
         <a class="mybutton" href="{{ post.pdf }}">PDF</a>&nbsp;
       {% endif %}
+      {% if post.code_url %}
+      <!-- For external links, add a link symbol -->
+        <a class="mybutton" href="{{ post.code_url }}">Code</a> 
+      {% endif %}
       <!-- there will always be a auto-generated url -->
       {% if post.link %}
       <!-- For external links, add a link symbol -->

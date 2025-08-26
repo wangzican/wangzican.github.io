@@ -19,8 +19,9 @@ collection: publications
 category: 'Conference Papers'
 excerpt: 'Second order optimization for black-box functions such as Path tracing'
 date: 2024-11-15
-type: 'arXiv preprint'
+type: 'ICCV 2025'
 thumbnail: '/images/higherorder/thumb.png'
+code_url: 'https://github.com/wangzican/Stochastic-Gradient-Estimation-for-Higher-order-Differentiable-Rendering#'
 pdf: 'https://arxiv.org/abs/2412.03489'
 ---
 
@@ -31,7 +32,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
 <br>
     <p style="margin: 0 auto; text-align: center;">
     <span style="font-size: 24px;"><b>Stochastic Gradient Estimation for Higher-order Differentiable Rendering</b></span> <br><br>
-    <span style="font-size: 17px; color: black">arXiv preprint</span><br><br>
+    <span style="font-size: 17px; color: black">ICCV 2025</span><br><br>
     <span style="font-size: 17px;"><a class="hiddenlink" href="https://wangzican.github.io/">Zican Wang<sup>1</sup></a>, <a class="hiddenlink" href="https://mfischer-ucl.github.io/">Michael Fischer<sup>1,2</sup></a>, <a class="hiddenlink" href="https://www.homepages.ucl.ac.uk/~ucactri/">Tobias Ritschel<sup>1</sup></a></span><br>
     <a style="font-size: 14px;" class="hiddenlink" href="https://www.ucl.ac.uk/"><sup>1</sup>University College London</a>, <a style="font-size: 14px;" class="hiddenlink" href="https://research.adobe.com/"><sup>2</sup>Adobe Research</a>
 </p>
@@ -41,15 +42,27 @@ pdf: 'https://arxiv.org/abs/2412.03489'
     <div style="display: inline">
         <ul style="list-style: none; text-align: center">
             <li class="horizItem">
-                <a href="https://arxiv.org/pdf/2412.03489" download="Higher_order_differentiable_rendering.pdf">
+                <a href="https://arxiv.org/pdf/2412.03489" download="Higher_order_differentiable_rendering.pdf" class="mylink">
                 <img class="teaserbutton" src="/images/higherorder/front_page.png" ><br>
                     <h4><strong>Paper</strong></h4>
                 </a>
             </li>
             <li class="horizItem">
-                <a href="files/ICCV_2025_Stochastic_Estimation_for_Higher_order_Differentiable_Rendering_Part2.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf">
+                <a href="files/ICCV_2025_Stochastic_Estimation_for_Higher_order_Differentiable_Rendering_Part2.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf" class="mylink">
                 <img class="teaserbutton" src="/images/icons/clip.png" ><br>
                     <h4><strong>Supplemental</strong></h4>
+                </a>
+            </li>
+            <li class="horizItem">
+                <a href="https://github.com/wangzican/Stochastic-Gradient-Estimation-for-Higher-order-Differentiable-Rendering#" class="mylink">
+                <img class="teaserbutton" src="/images/icons/github_logo.svg" ><br>
+                    <h4><strong>Code</strong></h4>
+                </a>
+            </li>
+            <li class="horizItem">
+                <a href="https://github.com/wangzican/Stochastic-Gradient-Estimation-for-Higher-order-Differentiable-Rendering#" class="mylink">
+                <img class="teaserbutton" src="/images/icons/poster.png" ><br>
+                    <h4><strong>Poster</strong></h4>
                 </a>
             </li>
         </ul>
