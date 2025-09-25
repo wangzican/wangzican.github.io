@@ -48,7 +48,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
                 </a>
             </li>
             <li class="horizItem">
-                <a href="files/ICCV_2025_Stochastic_Estimation_for_Higher_order_Differentiable_Rendering_Part2.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf" class="mylink">
+                <a href="files/hodr/ICCV_2025_Stochastic_Estimation_for_Higher_order_Differentiable_Rendering_Part2.pdf" download="Higher_order_differentiable_rendering_supplementary.pdf" class="mylink">
                 <img class="teaserbutton" src="/images/icons/clip.png" ><br>
                     <h4><strong>Supplemental</strong></h4>
                 </a>
@@ -60,7 +60,7 @@ pdf: 'https://arxiv.org/abs/2412.03489'
                 </a>
             </li>
             <li class="horizItem">
-                <a href="https://github.com/wangzican/Stochastic-Gradient-Estimation-for-Higher-order-Differentiable-Rendering#" class="mylink">
+                <a href="files/hodr/v4.pdf" download="ICCV2025_poster.pdf" class="mylink">
                 <img class="teaserbutton" src="/images/icons/poster.png" ><br>
                     <h4><strong>Poster</strong></h4>
                 </a>

@@ -37,6 +37,7 @@ const gradGaussianKernel = (x, sigma) => {
 };
 
 const hessGaussianKernel1D = (x, sigma) => {
+    const denom = Math.pow(sigma, 2);
     return (Math.pow(x, 2) / Math.pow(sigma, 4)) * calcGaussian1D(x, sigma) - (1 / denom) * calcGaussian1D(x, sigma);
 };
 
@@ -200,17 +201,21 @@ const optimizeFristOrder = (sigma, theta, stepsize, numSamples, antithetic, gt_t
     const [x_i, f_xi, p_xi] = getGradGaussianSamples(numSamples, sigma, antithetic);
     const grad = convolveFirstOrder(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
     // GD
+    // console.log(`1st increment: ${grad}`);
     theta -= stepsize * grad;
     return theta;
 };
 
 const optimizeSecondOrder = (sigma, theta, stepsize, numSamples, antithetic, gt_theta) => {
-    let nsamples_real = antithetic ? Math.round(numples / 2.0) : numSamples;
+    let nsamples_real = antithetic ? Math.round(numSamples / 2.0) : numSamples;
     // get hessian by convolving and multiplying by kernel:
+    const [x_grad_i, f_grad_xi, p_grad_xi] = getGradGaussianSamples(numSamples, sigma, antithetic);
     const [x_i, f_xi, p_xi] = getHessGaussianSamples(numSamples, sigma, antithetic);
-    const hess = convolve(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
-    // GD
-    theta -= stepsize * hess;
+    const grad = convolveFirstOrder(theta, nsamples_real, x_grad_i, p_grad_xi, sigma, gt_theta);
+    const hess = convolveSecondOrder(theta, nsamples_real, x_i, p_xi, sigma, gt_theta);
+    // Newton's method
+    // console.log(`hess: ${hess}`);
+    theta -= stepsize * grad/Math.max(Math.abs(hess), 0.05);
     return theta;
 }
 
@@ -235,7 +240,7 @@ function optimize() {
     const updateTrace = () => {
         if (i < epochs && run_anim) {
             thetaFirstOrder = optimizeFristOrder(sigma, thetaFirstOrder, stepsize, numSamples, antithetic_checkbox.checked, gt_theta);
-            thetaSecondOrder = optimizeFristOrder(sigma, thetaSecondOrder, stepsize * 3, numSamples*2, antithetic_checkbox.checked, gt_theta);
+            thetaSecondOrder = optimizeSecondOrder(sigma, thetaSecondOrder, stepsize, numSamples*2, antithetic_checkbox.checked, gt_theta);
             let costFirstOrder = mse(stepEdge(thetaFirstOrder), gt_theta);
             let costSecondOrder = mse(stepEdge(thetaSecondOrder), gt_theta);
             update_trajectory([thetaFirstOrder, stepEdge(thetaFirstOrder), costFirstOrder,
