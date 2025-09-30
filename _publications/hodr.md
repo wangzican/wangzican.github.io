@@ -84,7 +84,7 @@ operator. Our approach is based on importance sampling of a convolution that rep
 
 <p style="text-align: justify">
 Below is an interactive 1D example which uses our higher order method to differentiate through a discontinuous step function. The task here is to move the triangle center (parameterized by theta), such that it covers the grey pixel at the bottom. The plateaus in the cost landscape come from the fact that the error between the pixel's desired color and its current color does not take into account how "far away" the triangle is when it's not overlapping the pixel. We can smoothen these plateaus by our proposed convolution with a Gaussian kernel (displayed in plot in the top left corner, click 'Show Smooth' to see the convolved function). 
-We then sample this convoluted space to estimate a second order gradient (Hessian) and use the samples to drive a second order optimizer that moves the initial parameter (blue) towards the region of zero cost, i.e., such that the triangle overlaps the pixel. This is compared to the original first order method that is shown in red. <br>
+We then sample this convoluted space to estimate a second order gradient (Hessian) and use the samples to drive a second order optimizer(Newton) that moves the initial parameter (blue) towards the region of zero cost, i.e., such that the triangle overlaps the pixel. This is compared to the original first order method that is shown in red. <br>
 </p>
 
 <iframe src="/demo/hodr/index.html" width="100%" height="700px" style="border: none;"></iframe>
@@ -101,7 +101,7 @@ and hence does not need all the scene config / rendering infrastructure used in 
 </div> -->
 
 <br>
-<b>Derivation and sampling</b>
+<b>Derivation</b>
 <br>
 <p style="text-align: justify">
 The Hessian of a multivariate Gaussian function describes the second-order partial derivatives of that function. For sampling a diagonal Gaussian Hessian, we can use inverse transform sampling via the Smirnov transform. To allow sampling with this method, the 2nd order derivative is positivized and normalized in to a probability density function. Since the curvature of the Gaussian is the derivative of its gradient, we can get the CDF by scaling and combining the gradient of the Gaussian. 
@@ -122,8 +122,33 @@ Because the multivariate Gaussian is separable, each Hessian component decompose
        alt="Detailed derivation" 
        height="200">
 </figure>
-
 <br>
+<b>Aggregate sampling</b>
+<br>
+However, the sampling operation would be too costly for Hessians because each dimension need to be sampled individually.
+<br>
+<figure>
+  <img src="/images/higherorder/Non-agg.png"
+       alt="Detailed derivation"
+       style="
+              display:block; margin-inline:auto;            /* center a block by auto margins */
+              width:500px;height:auto;
+              margin-top:20px;
+              margin-bottom:0px
+            ">
+</figure>
+<br>
+So the average of the PDF for all dimensions is sampled once and convolved with different weights:
+<br>
+<figure>
+  <img src="/images/higherorder/Aggregate.png" 
+       alt="Aggregate sampling" 
+       style="
+              display:block; margin-inline:auto;            /* center a block by auto margins */
+              width:500px;height:auto;
+              margin-top:20px;
+            ">
+</figure>
 
 <b>Results</b>
 <br>
@@ -136,10 +161,9 @@ Methods:
   <img src="/images/higherorder/table_test.png" alt="table_test" width="100%">
 </figure>
 <br>
-
 <div class="image-row">
   <figure>
-    <img src="/images/500x300.png" alt="banana" width="200">
+    <img src="/images/higherorder/banana_grad.gif" alt="1st order banana" width="200">
     <figcaption>First order</figcaption>
   </figure>
   <figure>
@@ -154,7 +178,7 @@ Methods:
 <br>
 <div class="image-row">
   <figure>
-    <img src="/images/500x300.png" alt="suzanne" width="200">
+    <img src="/images/higherorder/suzzane_grad.gif" alt="1st order suzanne" width="200">
     <figcaption>First order</figcaption>
   </figure>
   <figure>
@@ -167,12 +191,9 @@ Methods:
   </figure>
 </div>
 
-
-
-
 <br>
-<!-- 
-<b>Citation</b><br>
+
+<!-- <b>Citation</b><br>
 If you find our work useful and use parts or ideas of our paper or code, please cite: <br>
 <p class="cite-box" style="margin-top: 5px">
   <span style="font-family: Lucida Console, Courier New, monospace; padding: 10px;">
