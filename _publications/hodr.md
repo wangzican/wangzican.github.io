@@ -80,6 +80,9 @@ operator. Our approach is based on importance sampling of a convolution that rep
  <img src="/images/higherorder/concept.png" width="100%" margin-top="50px" />
 </p>
 
+<p style="display: block; margin-left: auto; margin-right: auto; max-width: 75%">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eIpfalxe2M8?si=t-jBm6qQHXPDyBVp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</p>
 <b>Interactive Demo</b><br>
 
 <p style="text-align: justify">
@@ -161,8 +164,20 @@ Methods:
   <img src="/images/higherorder/table_test.png" alt="table_test" width="100%">
 </figure>
 <br>
+
 <div class="image-row">
-  <figure>
+  <figure class="align-center">
+    <figcaption>First order</figcaption>
+  </figure>
+  <figure class="align-center">
+    <figcaption>OurHVP</figcaption>
+  </figure>
+  <figure class="align-center">
+    <figcaption>Ground truth</figcaption>
+  </figure>
+</div>
+<div class="image-row">
+  <!-- <figure>
     <img src="/images/higherorder/banana_grad.gif" alt="1st order banana" width="200">
     <figcaption>First order</figcaption>
   </figure>
@@ -173,11 +188,15 @@ Methods:
   <figure>
     <img src="/images/higherorder/bananaGT.png" alt="bananaGT" width="200">
     <figcaption>Ground truth</figcaption>
-  </figure>
+  </figure> -->
+  <video id="shad-vid" style="display:inline-block; width: 95%;" autoplay muted loop controls>
+      <source src="/images/higherorder/iccv mug.webm" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
 </div>
 <br>
 <div class="image-row">
-  <figure>
+  <!-- <figure>
     <img src="/images/higherorder/suzzane_grad.gif" alt="1st order suzanne" width="200">
     <figcaption>First order</figcaption>
   </figure>
@@ -188,7 +207,11 @@ Methods:
   <figure>
     <img src="/images/higherorder/SuzanneGT.jpg" alt="suzanneGT" width="200">
     <figcaption>Ground truth</figcaption>
-  </figure>
+  </figure> -->
+  <video id="shad-vid" style="display:inline-block; width: 95%;" autoplay muted loop controls>
+      <source src="/images/higherorder/iccv suzzane.webm" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
 </div>
 
 <br>
