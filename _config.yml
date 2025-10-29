@@ -148,6 +148,7 @@ social:
   name                   : # If the user or organization name differs from the site's name
   links: # An array of links to social media profiles
 
+favicon: "/favicon.ico"
 
 # Analytics
 analytics:
