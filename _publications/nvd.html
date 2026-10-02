@@ -1,0 +1,1022 @@
+---
+# page settings
+permalink: /publication/nvd/
+layout: none # the page brings its own design (null would fall back to the collection default);
+             # its css, js and assets are in /publication/nvd/
+
+# Info
+title: "Neural Voxel Dynamics: Learning Volumetric Feature Advection for 3D Physics in V-JEPA Latent Space"
+authors:
+  - name: "Zican Wang"
+  - name: "Niloy Mitra"
+    url: "http://www0.cs.ucl.ac.uk/staff/n.mitra/"
+collection: publications
+category: 'Preprints'
+excerpt: 'Self-supervised 3D latent dynamics from monocular video via volumetric feature advection'
+date: 2026-10-02
+type: 'Preprint'
+thumbnail: '/images/nvd/thumb.png'
+pdf: '/publication/nvd/assets/voxelDynamics.pdf'
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neural Voxel Dynamics: Learning Volumetric Feature Advection for 3D Physics in V-JEPA Latent Space</title>
+  <meta name="description" content="Project page for Neural Voxel Dynamics: a self-supervised framework for learning 3D latent dynamics from monocular video via volumetric feature advection." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ===================== TOP NAVIGATION ===================== -->
+  <nav class="nav" id="nav">
+    <div class="nav__left">
+      <a class="nav__home" href="/">&larr; Zican Wang</a>
+      <a class="nav__brand" href="#top">Neural Voxel Dynamics</a>
+    </div>
+    <button class="nav__toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav__links">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#contributions">Contributions</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#experiments">Experiments</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===================== HERO / TITLE ===================== -->
+  <header class="hero" id="top">
+    <p class="hero__venue">Self-supervised 3D world models</p>
+    <h1 class="hero__title">
+      Neural Voxel Dynamics: Learning Volumetric Feature<br />
+      Advection for 3D Physics in V-JEPA Latent Space
+    </h1>
+
+    <p class="hero__authors">
+      <a href="https://wangzican.github.io/">Zican Wang</a> &middot;
+      <a href="http://www0.cs.ucl.ac.uk/staff/n.mitra/">Niloy Mitra</a>
+    </p>
+    <p class="hero__affil">University College London</p>
+
+    <div class="hero__links">
+      <a class="btn btn--soon" href="#" aria-disabled="true"><span>arXiv</span></a>
+      <a class="btn" href="assets/voxelDynamics.pdf" target="_blank" rel="noopener"><span>Paper (PDF, 93 MB)</span></a>
+      <a class="btn" href="assets/voxelDynamics_small.pdf" target="_blank" rel="noopener"><span>Compact PDF (2 MB)</span></a>
+      <a class="btn btn--soon" href="#" aria-disabled="true"><span>Code</span></a>
+      <a class="btn btn--soon" href="#" aria-disabled="true"><span>Data</span></a>
+    </div>
+
+    <p class="hero__tldr">
+      <b>TL;DR</b> — We learn implicit 3D physics by unprojecting V-JEPA video latents into a lifted 3D
+      voxel grid and advecting them with an action-conditioned, flow-matching transition operator.
+      Essentially, we learn a reusable V-JEPA dynamics module.
+    </p>
+
+    <!-- PREVIEW — two CogVideoX-vs-ours clips from Experiments 3b, mounted from js/config.js -->
+    <figure class="preview">
+      <div class="gallery gallery--preview" id="preview-mount"></div>
+      <figcaption class="cap">
+        <b>Flow-guided video generation on unseen real footage.</b> Wan-Move guided by our predicted
+        tracks; use the buttons under a clip to switch to a baseline, or see more in
+        <a href="#exp-flowgen">Experiments</a>.
+      </figcaption>
+    </figure>
+
+    <!-- TEASER — mounted from js/config.js -->
+    <figure class="teaser" id="teaser-mount"></figure>
+  </header>
+
+  <main>
+    <!-- ===================== ABSTRACT ===================== -->
+    <section class="section" id="abstract">
+      <h2 class="section__title">Abstract</h2>
+      <div class="abstract">
+        <p>
+          We present <strong>Neural Voxel Dynamics</strong>, a self-supervised framework for learning
+          3D latent dynamics from monocular video. While generative video models now produce visually
+          compelling motion, their predominantly 2D representations provide limited geometric structure
+          for modeling and controlling physical interactions. Instead, we learn dynamics in a lifted
+          volumetric latent space: we unproject semantic Video Joint-Embedding Predictive Architecture
+          (V-JEPA) features into a voxel grid using monocular depth priors, producing a geometrically
+          grounded representation that retains rich video features. We then introduce
+          <strong>Volumetric Feature Advection</strong>, an action-conditioned transition model that
+          predicts the evolution of these latent features directly in 3D.
+        </p>
+        <p>
+          Unlike hybrid approaches that assume access to privileged physics-engine states or explicit
+          simulation during training and/or inference, we learn only using video-derived supervision
+          and actions, allowing a single latent dynamics model to represent heterogeneous
+          material-dependent phenomena, unifying rigid-body and fluid dynamics. We evaluate across
+          multiple datasets, synthetic and real, and unseen scenarios such as unseen boundary
+          conditions and out-of-distribution generalization, measuring both predictive fidelity and 3D
+          geometric consistency. We further evaluate physical plausibility with <strong>Physics-IQ</strong>,
+          using videos decoded from predicted latent states and videos generated from predicted
+          optical flow. Our results show that geometrically lifting pretrained video latent
+          representations provides a scalable route toward dynamic world models that learn structured
+          3D physical dynamics without access to privileged simulator state.
+        </p>
+      </div>
+
+      <!-- Plain-language explainer -->
+      <div class="tldr">
+        <div class="tldr__card">
+          <h4>The problem</h4>
+          <p>Physical dynamics unfold in 3D: objects persist through occlusion, motion occurs in a
+             common spatial frame, and interactions depend on geometry and material properties.
+             2D latent spaces keep those factors entangled with the camera.</p>
+        </div>
+        <div class="tldr__card">
+          <h4>The idea</h4>
+          <p>Move the predictive bottleneck out of image space: carry features in a world-frame
+             voxel grid and let one operator <em>advect</em> them through it — physics as state
+             transport rather than pixel morphing.</p>
+        </div>
+        <div class="tldr__card">
+          <h4>Why it matters</h4>
+          <p>No material labels and no solver state: the same operator covers rigid bodies, fluids
+             and smoke, and what comes out is a 4D trajectory you can look at from angles the camera
+             never saw.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTRIBUTIONS ===================== -->
+    <section class="section" id="contributions">
+      <h2 class="section__title">Contributions</h2>
+      <p class="section__lead">
+        Three claims, in the order the paper makes them:
+      </p>
+      <div class="contrib">
+        <div class="contrib__card">
+          <span class="contrib__num">1</span>
+          <h4>A persistent, grounded latent world state</h4>
+          <p>Pretrained video features are lifted into 3D, and the state is maintained through time
+             while only partially observed — not re-derived from each frame in isolation.</p>
+        </div>
+        <div class="contrib__card">
+          <span class="contrib__num">2</span>
+          <h4>Volumetric Feature Advection</h4>
+          <p>The transition operator itself, which generatively evolves that state under an applied
+             action — with no material-specific solvers and no privileged information.</p>
+        </div>
+        <div class="contrib__card">
+          <span class="contrib__num">3</span>
+          <h4>One shared model across diverse dynamics</h4>
+          <p>Empirical evaluation showing that a single shared 3D latent transition model captures
+             diverse dynamics, outperforming hybrid and 2D-latent baselines on flow and video
+             prediction.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== METHOD ===================== -->
+    <section class="section" id="method">
+      <h2 class="section__title">Method</h2>
+      <p class="section__lead">
+        Pixel observations entangle distinct factors: camera perspective, scene geometry, and
+        material-dependent dynamics. Against 2D generative models on one side and explicit 3D
+        simulators on the other, Neural Voxel Dynamics is a latent middle ground. The design is
+        <em>materially implicit</em> — one operator handles heterogeneous phenomena without any
+        material label; <em>geometrically grounded</em> — the voxel structure makes occupancy and
+        occlusion explicit rather than something to infer from entangled 2D latents; and
+        <em>perspective-independent</em> — anchored in a world frame, so it accepts multiview input
+        and a predicted trajectory can be rendered from new viewpoints without re-running it.
+      </p>
+
+      <!-- PIPELINE FIGURE — mounted from js/config.js -->
+      <figure class="figure" id="pipeline-mount"></figure>
+
+      <div class="steps">
+        <div class="steps__item">
+          <span class="steps__num">1</span>
+          <div>
+            <h4>Geometric lifting (points &rarr; voxels)</h4>
+            <p>MoGe estimates per-frame depth and camera parameters; a frozen V-JEPA&nbsp;2.1 encoder
+               produces patch-level features (<em>d</em>&nbsp;=&nbsp;1408, one latent step per two
+               source frames). Unprojecting them into a world-frame grid — the first camera frame is
+               the world frame — gives a state <em>Z<sub>t</sub></em> that carries depth and semantic
+               features and marks every voxel <em>empty</em>, <em>occupied</em>, or
+               <em>occluded</em>. Reusing a strong pretrained backbone this way avoids training a 4D
+               video encoder from scratch.</p>
+          </div>
+        </div>
+        <div class="steps__item">
+          <span class="steps__num">2</span>
+          <div>
+            <h4>Implicit feature advection (physics as transport)</h4>
+            <p>Given a history <em>Z<sub>1:t</sub></em> and an optional action <em>u<sub>t</sub></em>,
+               the advector predicts
+               <em>Ẑ<sub>t+1</sub> = f<sub>θ</sub>(Z<sub>1:t</sub>, u<sub>t</sub>)</em>. Rather than
+               deterministically regressing the next state, <em>f<sub>θ</sub></em> is trained by flow
+               matching: it learns a time-dependent velocity field that transports a noisy source
+               distribution toward the target latent manifold. That gives a generative prior over
+               physically plausible transitions and lets the model represent the conditional
+               uncertainty arising from partial observation and unresolved dynamics, without the rigid
+               constraints of a predefined analytical solver.</p>
+          </div>
+        </div>
+        <div class="steps__item">
+          <span class="steps__num">3</span>
+          <div>
+            <h4>Differentiable projection</h4>
+            <p>A projection head maps any predicted state back to patch-aligned latents for a target
+               camera. Supervision therefore stays video-derived end to end, and rolling the advector
+               forward autoregressively yields a full 4D latent trajectory that can be read out from a
+               viewpoint chosen after the fact.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="subhead">Sparse tokenization and the advector</h3>
+      <p class="body">
+        To avoid the cubic cost of dense grids, <em>f<sub>θ</sub></em> operates on a sparse set of
+        active voxels and their neighbours: the union of occupied and occluded voxels across the
+        context window, dilated morphologically to leave room for predicted motion. Capacity
+        concentrates on scene-relevant geometry, and cost scales with object complexity rather than
+        with grid resolution.
+      </p>
+      <p class="body">
+        The advector is a Diffusion Transformer variant whose layers alternate between two attention
+        modes. <em>Local spatial attention</em> restricts each voxel to a
+        <em>k</em>&nbsp;&times;&nbsp;<em>k</em>&nbsp;&times;&nbsp;<em>k</em> sparse neighbourhood
+        (5 layers, <em>k</em>&nbsp;=&nbsp;5), mimicking the step-wise force propagation of classical
+        solvers such as MPM and giving cost linear rather than quadratic in the number of active
+        tokens. <em>Temporal attention</em> regroups tokens by spatial location so each voxel attends
+        causally along its own trajectory. Since one step propagates information only within a local
+        neighbourhood, longer-range transport is composed over stacked layers and successive
+        prediction steps. Adaptive layer normalization modulates the network by the flow-matching
+        time <em>τ</em>, and the output feature velocities are scattered back into the lattice.
+      </p>
+
+      <h3 class="subhead">Force conditioning and viewpoint</h3>
+      <p class="body">
+        The control is a time-varying action descriptor <em>u<sub>t</sub></em> &isin;
+        &#8477;<sup>12</sup>: contact point, applied direction, magnitude, temporal duration, an
+        active-frame indicator, and local / global flags, expressed and normalized in world
+        coordinates to reduce ambiguity. It is injected on two complementary paths —
+        <em>local integration</em>, where the force is projected to the token dimension and added
+        element-wise to each voxel token as a spatially uniform contextual field, and
+        <em>global modulation</em>, where it is encoded into conditioning tokens concatenated to the
+        sequence so self-attention can modulate the scene-level transition.
+      </p>
+      <p class="body">
+        Crucially, <em>u<sub>t</sub></em> is not a privileged simulator state: it specifies no
+        material parameters such as stiffness or viscosity, no engine state, and no per-particle
+        variables. The advector never receives them, and material-dependent behaviour emerges purely
+        from the latent state and the learned transition. Actions are drawn only for the
+        CLEVRER/MuJoCo data; on datasets without such annotations the action reduces to the zero
+        vector and the model predicts implicit dynamics.
+      </p>
+      <p class="body">
+        Observations come from a single fixed viewpoint, but because the state is anchored in the
+        world frame rather than the camera, the formulation accepts multiview input where it is
+        available. Moving cameras remain out of scope: sparse tokenization scales poorly to them, as
+        it does to unbounded environments and high-frequency deformation.
+      </p>
+    </section>
+
+    <!-- ===================== EXPERIMENTS ===================== -->
+    <section class="section" id="experiments">
+      <h2 class="section__title">Experiments</h2>
+
+      <!-- Sub-navigation for the experiment section -->
+      <nav class="subnav" id="exp-subnav" aria-label="Experiments sub-navigation">
+        <div class="subnav__scroll">
+          <a href="#exp-setup">Setup</a>
+          <a href="#exp-latent">1 · Latent</a>
+          <a href="#exp-rgb">2 · RGB</a>
+          <a href="#exp-flow">3 · Flow</a>
+          <a href="#exp-flowgen">4 · Flow &rarr; real videos</a>
+          <a href="#exp-occ">5 · Occupancy</a>
+          <a href="#exp-force">6 · Force input</a>
+          <a href="#exp-ablation">Ablations</a>
+          <a href="#exp-fail">Failures</a>
+        </div>
+      </nav>
+
+      <!-- --------- 0. SETUP --------- -->
+      <h3 class="subhead" id="exp-setup">Setup &amp; evaluation protocol</h3>
+      <p class="section__lead">
+        We evaluate across three datasets spanning heterogeneous physics: a CLEVRER-style
+        simulated set with explicit forces (rigid collisions), <strong>PhysInOne</strong> (fluids
+        with implicit force), and <strong>PhysGaia</strong> (smoke and fluids). <strong>Ours-GT</strong>
+        uses ground-truth depth (available for CLEVRER and PhysInOne); <strong>Ours-Estimate</strong>
+        uses MoGe-estimated depth for all three. Kubric MOVI-C is held out entirely and used only
+        for zero-shot testing.
+      </p>
+      <p class="body">
+        All methods receive the first frames and generate the following ones. Because our model
+        predicts V-JEPA latents directly, every baseline's generated RGB video is encoded through the
+        same V-JEPA encoder before scoring, so all methods are measured in a common space over 16
+        frames. Force is provided in each baseline's native interface — 3D force for
+        PhysCtrl/PhysGaussian, force projected to 2D camera space for PhysGen, and as text for
+        CogVideoX.
+      </p>
+      <p class="body">
+        To avoid favoring models optimized under the same latent objective, we report three non-V-JEPA
+        views of physical correctness alongside latent L2: <em>occupancy</em> (3D geometry),
+        <em>2D/3D latent flow</em> (motion), and <em>optical flow / PSNR on decoded RGB</em>. A
+        2D-latent baseline (no 3D projection, same flow-matching objective) isolates the contribution
+        of lifting to 3D.
+      </p>
+
+      <!-- --------- 1. LATENT LOSS --------- -->
+      <h3 class="subhead" id="exp-latent">1 &middot; Latent prediction loss</h3>
+      <p class="section__lead">
+        We first measure prediction accuracy directly in V-JEPA latent space. Each entry reports
+        <strong>2D / 3D latent L2 loss</strong> (&darr;), under single/multi-camera and
+        ground-truth/estimated-depth protocols, and broken down by dynamics category. Our method stays
+        low and stable across material types and camera configurations.
+      </p>
+      <div class="tabs tabs--results">
+        <div class="tabs__bar" role="tablist" aria-label="Latent prediction results">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Qualitative videos</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Quantitative tables</button>
+        </div>
+        <div class="tabs__panels">
+        <div class="tabs__panel active" role="tabpanel">
+          <div class="tabs">
+            <div class="tabs__bar" role="tablist" aria-label="Latent prediction videos">
+              <button class="tabs__btn active" role="tab" aria-selected="true">Predicted latent dynamics</button>
+              <button class="tabs__btn" role="tab" aria-selected="false">Multi-view visualization</button>
+            </div>
+            <div class="tabs__panels">
+              <div class="tabs__panel active" role="tabpanel">
+                <p class="body">Predicted dynamics in V-JEPA space vs. reference, across heterogeneous materials. Hover a tile and move across it to reveal either side.</p>
+                <div class="gallery gallery--3" id="latent-vids-mount"></div>
+              </div>
+              <div class="tabs__panel" role="tabpanel">
+                <p class="body">The lifted 3D latent can be rendered from novel viewpoints for visualization,
+                  shown for a multiview and a single-view input protocol.</p>
+                <div class="gallery" id="multiview1-mount"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tabs__panel" role="tabpanel">
+      <div class="tabs">
+        <div class="tabs__bar" role="tablist">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Camera &times; depth protocols</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">By material type</button>
+        </div>
+        <div class="tabs__panels">
+        <div class="tabs__panel active" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 1.</strong> Latent prediction across camera&ndash;depth protocols. Each entry
+              reports mean &plusmn; std for 2D / 3D latent L2 loss (&darr;).
+              <span class="muted">N/A &mdash; dataset provides no ground-truth depth. The CLEVRER
+              GT-depth columns use our synthetic dataset (Appendix A).</span>
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="ta-l">Data</th>
+                    <th rowspan="2" class="ta-l">Method</th>
+                    <th colspan="2">Single-camera</th>
+                    <th colspan="2">Multi-camera</th>
+                  </tr>
+                  <tr><th>GT depth</th><th>Est. depth</th><th>GT depth</th><th>Est. depth</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td rowspan="7" class="ta-l grp">CLEVRER</td>
+                    <td class="ta-l">CogVideoX</td><td>2.98 &plusmn; 0.68 / 0.32 &plusmn; 0.12</td><td>2.98 &plusmn; 0.68 / 0.56 &plusmn; 0.13</td><td>3.87 &plusmn; 0.58 / 1.50 &plusmn; 0.11</td><td>4.14 &plusmn; 0.49 / 1.18 &plusmn; 0.07</td></tr>
+                  <tr><td class="ta-l">PhysGen</td><td>1.91 &plusmn; 0.08 / <u>0.17 &plusmn; 0.02</u></td><td>2.97 &plusmn; 0.19 / 0.56 &plusmn; 0.03</td><td>3.57 &plusmn; 0.17 / 1.89 &plusmn; 0.11</td><td>4.12 &plusmn; 0.49 / 1.24 &plusmn; 0.19</td></tr>
+                  <tr><td class="ta-l">PhysGaussian</td><td>4.13 &plusmn; 0.08 / 0.56 &plusmn; 0.01</td><td>4.39 &plusmn; 0.08 / 0.55 &plusmn; 0.03</td><td>4.34 &plusmn; 0.09 / 1.18 &plusmn; 0.07</td><td>4.21 &plusmn; 0.09 / 1.14 &plusmn; 0.08</td></tr>
+                  <tr><td class="ta-l">PhysCtrl</td><td>2.96 &plusmn; 0.37 / 0.35 &plusmn; 0.05</td><td>2.84 &plusmn; 0.23 / 0.57 &plusmn; 0.03</td><td>3.32 &plusmn; 0.31 / 1.01 &plusmn; 0.07</td><td>3.21 &plusmn; 0.20 / 1.15 &plusmn; 0.08</td></tr>
+                  <tr><td class="ta-l">2D baseline</td><td>1.39 &plusmn; 0.28 / 0.22 &plusmn; 0.08</td><td>1.53 &plusmn; 0.71 / 0.42 &plusmn; 0.12</td><td>3.19 &plusmn; 0.37 / 1.20 &plusmn; 0.27</td><td>3.69 &plusmn; 0.59 / 1.10 &plusmn; 0.11</td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-GT</td><td><b>0.98 &plusmn; 0.07 / 0.02 &plusmn; 0.00</b></td><td><b>1.01 &plusmn; 0.10</b> / <u>0.39 &plusmn; 0.01</u></td><td><b>1.12 &plusmn; 0.09 / 0.82 &plusmn; 0.05</b></td><td><u>2.51 &plusmn; 0.11 / 0.91 &plusmn; 0.05</u></td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><u>1.26 &plusmn; 0.13</u> / 0.25 &plusmn; 0.03</td><td><b>1.01 &plusmn; 0.23 / 0.36 &plusmn; 0.04</b></td><td><u>2.50 &plusmn; 0.15 / 0.99 &plusmn; 0.09</u></td><td><b>2.25 &plusmn; 0.09 / 0.90 &plusmn; 0.09</b></td></tr>
+                  <tr><td rowspan="7" class="ta-l grp">PhysInOne</td>
+                    <td class="ta-l">CogVideoX</td><td>3.02 &plusmn; 0.32 / 0.53 &plusmn; 0.16</td><td>3.08 &plusmn; 0.33 / 0.75 &plusmn; 0.20</td><td>4.05 &plusmn; 0.31 / 1.01 &plusmn; 0.11</td><td>4.00 &plusmn; 0.39 / 1.00 &plusmn; 0.19</td></tr>
+                  <tr><td class="ta-l">PhysGen</td><td>3.47 &plusmn; 0.59 / <u>0.52 &plusmn; 0.15</u></td><td>3.61 &plusmn; 0.27 / 0.71 &plusmn; 0.19</td><td>3.98 &plusmn; 0.37 / 0.87 &plusmn; 0.20</td><td>4.12 &plusmn; 0.91 / 1.02 &plusmn; 0.49</td></tr>
+                  <tr><td class="ta-l">PhysGaussian</td><td>3.98 &plusmn; 0.22 / 1.02 &plusmn; 0.22</td><td>3.95 &plusmn; 0.89 / 0.89 &plusmn; 0.20</td><td>4.57 &plusmn; 0.21 / 0.90 &plusmn; 0.15</td><td>4.62 &plusmn; 0.23 / 1.04 &plusmn; 0.21</td></tr>
+                  <tr><td class="ta-l">PhysCtrl</td><td>4.24 &plusmn; 0.37 / 0.66 &plusmn; 0.31</td><td>4.23 &plusmn; 0.51 / 0.81 &plusmn; 0.21</td><td>4.57 &plusmn; 0.35 / 0.84 &plusmn; 0.17</td><td>4.34 &plusmn; 0.38 / 0.98 &plusmn; 0.21</td></tr>
+                  <tr><td class="ta-l">2D baseline</td><td><u>2.99 &plusmn; 0.13</u> / 0.55 &plusmn; 0.19</td><td><u>2.25 &plusmn; 0.23</u> / 0.82 &plusmn; 0.19</td><td>3.98 &plusmn; 0.11 / 0.99 &plusmn; 0.12</td><td>4.14 &plusmn; 0.38 / 1.00 &plusmn; 0.50</td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-GT</td><td><b>0.43 &plusmn; 0.05 / 0.06 &plusmn; 0.01</b></td><td>3.08 &plusmn; 0.17 / <u>0.63 &plusmn; 0.14</u></td><td><b>2.62 &plusmn; 0.10 / 0.49 &plusmn; 0.07</b></td><td><u>2.62 &plusmn; 0.17 / 0.51 &plusmn; 0.14</u></td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-Estimate</td><td>3.02 &plusmn; 0.17 / 0.53 &plusmn; 0.14</td><td><b>1.67 &plusmn; 0.13 / 0.42 &plusmn; 0.14</b></td><td><u>3.51 &plusmn; 0.17 / 0.66 &plusmn; 0.14</u></td><td><b>2.59 &plusmn; 0.21 / 0.49 &plusmn; 0.11</b></td></tr>
+                  <tr><td rowspan="7" class="ta-l grp">PhysGaia</td>
+                    <td class="ta-l">CogVideoX</td><td>N/A</td><td>3.71 &plusmn; 0.72 / 0.96 &plusmn; 0.32</td><td>N/A</td><td>3.72 &plusmn; 0.72 / 1.57 &plusmn; 0.47</td></tr>
+                  <tr><td class="ta-l">PhysGen</td><td>N/A</td><td>4.89 &plusmn; 0.50 / 1.15 &plusmn; 0.32</td><td>N/A</td><td>5.23 &plusmn; 0.52 / 1.68 &plusmn; 0.54</td></tr>
+                  <tr><td class="ta-l">PhysGaussian</td><td>N/A</td><td>3.98 &plusmn; 1.16 / 0.96 &plusmn; 0.33</td><td>N/A</td><td>3.95 &plusmn; 1.21 / 1.58 &plusmn; 0.48</td></tr>
+                  <tr><td class="ta-l">PhysCtrl</td><td>N/A</td><td>4.25 &plusmn; 1.05 / 0.97 &plusmn; 0.32</td><td>N/A</td><td>4.25 &plusmn; 1.09 / 1.58 &plusmn; 0.48</td></tr>
+                  <tr><td class="ta-l">2D baseline</td><td>N/A</td><td>2.16 &plusmn; 0.92 / 0.95 &plusmn; 0.61</td><td>N/A</td><td>4.97 &plusmn; 0.99 / 1.47 &plusmn; 0.22</td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-GT</td><td>N/A</td><td><u>1.84 &plusmn; 0.78 / 0.47 &plusmn; 0.21</u></td><td>N/A</td><td><u>2.10 &plusmn; 0.50 / 1.15 &plusmn; 0.35</u></td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-Estimate</td><td>N/A</td><td><b>1.66 &plusmn; 0.50 / 0.41 &plusmn; 0.21</b></td><td>N/A</td><td><b>1.99 &plusmn; 0.51 / 1.00 &plusmn; 0.09</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+          <p class="table-legend">Throughout, <b>bold</b> marks the best result and <u>underline</u> the second best.</p>
+        </div>
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 2.</strong> Latent prediction per dynamics category on the synthetic dataset
+              (2D / 3D latent L2, &darr;). Little fluctuation across rigid, fluid, and smoke.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Method</th><th>Rigid body</th><th>Fluid</th><th>Smoke</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">CogVideoX</td><td>3.39 &plusmn; 0.64 / 0.91 &plusmn; 0.33</td><td>4.21 &plusmn; 0.31 / 1.15 &plusmn; 0.13</td><td>3.07 &plusmn; 0.68 / 1.56 &plusmn; 0.48</td></tr>
+                  <tr><td class="ta-l">PhysGen</td><td>2.54 &plusmn; 0.35 / 0.59 &plusmn; 0.37</td><td>5.22 &plusmn; 1.10 / 1.22 &plusmn; 0.39</td><td>4.37 &plusmn; 0.45 / 1.80 &plusmn; 0.47</td></tr>
+                  <tr><td class="ta-l">PhysGaussian</td><td>3.32 &plusmn; 0.15 / 0.90 &plusmn; 0.31</td><td>4.80 &plusmn; 0.20 / 1.18 &plusmn; 0.19</td><td>2.67 &plusmn; 1.06 / 1.70 &plusmn; 0.47</td></tr>
+                  <tr><td class="ta-l">PhysCtrl</td><td>3.58 &plusmn; 0.37 / 0.83 &plusmn; 0.33</td><td>5.03 &plusmn; 0.34 / 1.19 &plusmn; 0.22</td><td>3.72 &plusmn; 0.96 / 1.73 &plusmn; 0.48</td></tr>
+                  <tr><td class="ta-l">2D baseline</td><td>2.09 &plusmn; 0.13 / 0.31 &plusmn; 0.21</td><td>2.99 &plusmn; 0.27 / 1.20 &plusmn; 0.33</td><td>2.51 &plusmn; 0.53 / 1.62 &plusmn; 0.25</td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-GT</td><td><b>1.94 &plusmn; 0.14 / 0.19 &plusmn; 0.11</b></td><td><b>2.12 &plusmn; 0.11</b> / <u>0.82 &plusmn; 0.09</u></td><td><u>2.22 &plusmn; 0.33 / 1.15 &plusmn; 0.20</u></td></tr>
+                  <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><u>1.97 &plusmn; 0.16 / 0.26 &plusmn; 0.12</u></td><td><b>2.12 &plusmn; 0.21 / 0.80 &plusmn; 0.13</b></td><td><b>2.03 &plusmn; 0.41 / 1.00 &plusmn; 0.29</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+        </div>
+      </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- --------- 2. RGB MSE LOSS --------- -->
+      <h3 class="subhead" id="exp-rgb">2 &middot; RGB reconstruction (decoder)</h3>
+      <p class="section__lead">
+        A small V-JEPA-to-video decoding head transfers the predicted latent dynamics back to RGB. We
+        report frame-level reconstruction (PSNR / MSE) against reference videos and show decoded clips.
+      </p>
+      <div class="tabs tabs--results">
+        <div class="tabs__bar" role="tablist" aria-label="RGB reconstruction results">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Decoder videos</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Quantitative table</button>
+        </div>
+        <div class="tabs__panels">
+        <div class="tabs__panel active" role="tabpanel">
+          <div class="gallery gallery--3" id="rgb-vids-mount"></div>
+          <!-- HIDDEN, NOT DELETED: multi-view visualization of the decoded clips.
+               A <template> keeps the markup in the file but out of the document, so
+               main.js never mounts it. To restore, delete the gallery div above and
+               this template's wrapper tags; the config entries are still in place. -->
+          <template id="multiview2-hidden">
+          <div class="tabs">
+            <div class="tabs__bar" role="tablist" aria-label="RGB reconstruction videos">
+              <button class="tabs__btn active" role="tab" aria-selected="true">Decoded RGB videos</button>
+              <button class="tabs__btn" role="tab" aria-selected="false">Multi-view visualization</button>
+            </div>
+            <div class="tabs__panels">
+              <div class="tabs__panel active" role="tabpanel">
+                <div class="gallery gallery--3" id="rgb-vids-mount"></div>
+              </div>
+              <div class="tabs__panel" role="tabpanel">
+                <p class="body">Each decoded clip rendered from a novel viewpoint.</p>
+                <div class="gallery gallery--3" id="multiview2-mount"></div>
+              </div>
+            </div>
+          </div>
+          </template>
+        </div>
+        <div class="tabs__panel" role="tabpanel">
+      <figure class="table-wrap">
+        <figcaption class="table-cap">
+          <strong>Table 3.</strong> RGB reconstruction fidelity of decoded predictions, PSNR
+          (dB, &uarr;; higher &rArr; lower MSE) vs. reference.
+        </figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER &uarr;</th><th>PhysInOne &uarr;</th><th>PhysGaia &uarr;</th><th>Kubric &uarr;</th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>16.40 &plusmn; 0.53</td><td><b>20.46 &plusmn; 4.07</b></td><td>16.96 &plusmn; 7.11</td><td>17.19 &plusmn; 3.00</td></tr>
+              <tr><td class="ta-l">PhysGen</td><td>24.71 &plusmn; 2.30</td><td>19.17 &plusmn; 3.39</td><td>16.45 &plusmn; 8.71</td><td>16.36 &plusmn; 1.48</td></tr>
+              <tr><td class="ta-l">PhysGaussian</td><td>25.87 &plusmn; 1.64</td><td><u>19.92 &plusmn; 3.52</u></td><td>15.99 &plusmn; 5.94</td><td><u>17.87 &plusmn; 3.11</u></td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td>18.21 &plusmn; 5.14</td><td>19.63 &plusmn; 2.19</td><td>16.80 &plusmn; 5.95</td><td>17.12 &plusmn; 3.04</td></tr>
+              <tr><td class="ta-l">2D baseline</td><td><u>26.42 &plusmn; 1.48</u></td><td>17.20 &plusmn; 1.36</td><td>17.02 &plusmn; 6.27</td><td>17.30 &plusmn; 1.67</td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate (decoder)</td><td><b>29.83 &plusmn; 2.38</b></td><td>18.59 &plusmn; 1.34</td><td><u>18.39 &plusmn; 6.78</u></td><td><b>17.89 &plusmn; 2.54</b></td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate (Wan-Move)</td><td>22.85 &plusmn; 2.62</td><td>14.14 &plusmn; 4.30</td><td><b>18.57 &plusmn; 3.83</b></td><td>15.00 &plusmn; 2.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+      <p class="body">
+        Rendering uses a trainable convolutional mapper followed by a frozen pretrained image VAE
+        decoder; V-JEPA and the VAE stay frozen while the mapper is trained. We report PSNR and omit
+        FVD, as the number of decoded clips is too small for a meaningful distribution-level estimate.
+        Physical plausibility is scored separately with Physics-IQ (Table 7).
+      </p>
+        </div>
+        </div>
+      </div>
+
+      <!-- --------- 3. FLOW ESTIMATION --------- -->
+      <h3 class="subhead" id="exp-flow">3 &middot; Flow estimation</h3>
+      <p class="section__lead">
+        We compare predicted latents against ground-truth trajectories via latent flow consistency
+        (lower is better). <strong>Kubric MOVI-C is zero-shot</strong> &mdash; never used for training.
+        Ours-Estimate is trained with diffusion forcing and history-guided diffusion throughout.
+      </p>
+      <div class="tabs tabs--results">
+        <div class="tabs__bar" role="tablist" aria-label="Flow estimation results">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Qualitative videos</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Quantitative tables</button>
+        </div>
+        <div class="tabs__panels">
+        <div class="tabs__panel active" role="tabpanel">
+      <h4 class="minihead">(a) 2D flow</h4>
+      <p class="body">
+        Predicted vs. reference 2D flow for rigid bodies, smoke, and fluid, with arrows overlaid on
+        V-JEPA features. The voxel model is not trained with a flow loss &mdash; flow is read out from
+        the learned representation.
+      </p>
+      <div class="gallery gallery--3" id="flow-mount"></div>
+
+      <p class="body">
+        The same read-out on real footage with mixed dynamics, shown larger for the dense trajectories.
+      </p>
+      <div class="gallery gallery--1" id="flow-real-mount"></div>
+        </div>
+        <div class="tabs__panel" role="tabpanel">
+
+      <h4 class="minihead">(a) 2D flow</h4>
+      <figure class="table-wrap">
+        <figcaption class="table-cap"><strong>Table 4.</strong> 2D latent-flow error (&darr;), mean &plusmn; std. Kubric MOVI-C is zero-shot.</figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER</th><th>PhysGaia</th><th>PhysInOne</th><th>Kubric MOVI-C <span class="muted">(zero-shot)</span></th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>0.492 &plusmn; 0.031</td><td>0.824 &plusmn; 0.100</td><td>0.753 &plusmn; 0.065</td><td>0.667 &plusmn; 0.094</td></tr>
+              <tr><td class="ta-l">PhysGen</td><td><u>0.315 &plusmn; 0.022</u></td><td>0.737 &plusmn; 0.105</td><td>0.637 &plusmn; 0.110</td><td>0.738 &plusmn; 0.133</td></tr>
+              <tr><td class="ta-l">PhysGaussian</td><td>0.407 &plusmn; 0.007</td><td>0.682 &plusmn; 0.134</td><td><u>0.405 &plusmn; 0.083</u></td><td>0.836 &plusmn; 0.126</td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td>0.651 &plusmn; 0.017</td><td>0.778 &plusmn; 0.127</td><td>0.694 &plusmn; 0.084</td><td>0.633 &plusmn; 0.091</td></tr>
+              <tr><td class="ta-l">2D baseline</td><td>0.383 &plusmn; 0.020</td><td><u>0.534 &plusmn; 0.160</u></td><td>0.435 &plusmn; 0.055</td><td><u>0.563 &plusmn; 0.109</u></td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><b>0.273 &plusmn; 0.009</b></td><td><b>0.464 &plusmn; 0.118</b></td><td><b>0.373 &plusmn; 0.031</b></td><td><b>0.488 &plusmn; 0.151</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <p class="body">
+        A small convolutional head maps two consecutive latent maps to an optical-flow field, with
+        V-JEPA kept frozen; at inference it needs only the latent sequence, while baseline flows are
+        computed from their generated videos.
+      </p>
+      <figure class="table-wrap">
+        <figcaption class="table-cap">
+          <strong>Table 5.</strong> Optical-flow error (&darr;). Each entry reports displacement error
+          normalized by ground-truth flow magnitude / flow-vector angle difference in degrees; a
+          magnitude above one means less meaningful motion. Kubric MOVI-C is zero-shot.
+        </figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER</th><th>PhysGaia</th><th>PhysInOne</th><th>Kubric MOVI-C <span class="muted">(zero-shot)</span></th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>1.551 &plusmn; 0.915 / <u>17.7 &plusmn; 5.3</u></td><td><u>0.996 &plusmn; 0.037</u> / <b>21.8 &plusmn; 6.3</b></td><td>1.094 &plusmn; 0.113 / <b>24.0 &plusmn; 6.0</b></td><td>1.086 &plusmn; 0.228 / <u>23.4 &plusmn; 2.7</u></td></tr>
+              <tr><td class="ta-l">PhysGen</td><td>0.993 &plusmn; 0.057 / 19.2 &plusmn; 3.6</td><td>1.001 &plusmn; 0.003 / 50.2 &plusmn; 7.5</td><td>1.072 &plusmn; 0.151 / 52.3 &plusmn; 12.9</td><td>1.000 &plusmn; 0.061 / 24.1 &plusmn; 20.2</td></tr>
+              <tr><td class="ta-l">PhysGaussian</td><td>0.804 &plusmn; 0.338 / 26.4 &plusmn; 4.1</td><td>1.000 &plusmn; 0.002 / 37.8 &plusmn; 4.0</td><td>1.068 &plusmn; 0.201 / 60.9 &plusmn; 13.1</td><td>0.982 &plusmn; 0.076 / 29.7 &plusmn; 13.8</td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td>10.93 &plusmn; 20.97 / 64.5 &plusmn; 16.9</td><td>1.085 &plusmn; 0.173 / 41.0 &plusmn; 8.5</td><td>1.295 &plusmn; 0.455 / 47.7 &plusmn; 13.7</td><td>1.047 &plusmn; 0.121 / 42.3 &plusmn; 14.1</td></tr>
+              <tr><td class="ta-l">2D baseline</td><td><u>0.583 &plusmn; 0.032</u> / 21.24 &plusmn; 5.2</td><td>1.055 &plusmn; 0.124 / 30.35 &plusmn; 9.5</td><td><u>1.005 &plusmn; 0.314</u> / 43.33 &plusmn; 13.2</td><td><u>0.981 &plusmn; 0.030</u> / 29.24 &plusmn; 19.9</td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><b>0.545 &plusmn; 0.186 / 13.5 &plusmn; 2.5</b></td><td><b>0.977 &plusmn; 0.165</b> / <u>29.0 &plusmn; 6.0</u></td><td><b>0.980 &plusmn; 0.035</b> / <u>25.9 &plusmn; 8.6</u></td><td><b>0.917 &plusmn; 0.059 / 23.1 &plusmn; 9.7</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <h4 class="minihead">(b) 3D flow</h4>
+      <figure class="table-wrap">
+        <figcaption class="table-cap"><strong>Table 6.</strong> 3D latent-flow error (&darr;), mean &plusmn; std. Kubric MOVI-C is zero-shot.</figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER</th><th>PhysGaia</th><th>PhysInOne</th><th>Kubric MOVI-C <span class="muted">(zero-shot)</span></th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>0.619 &plusmn; 0.068</td><td>0.701 &plusmn; 0.019</td><td>0.763 &plusmn; 0.068</td><td>0.735 &plusmn; 0.025</td></tr>
+              <tr><td class="ta-l">PhysGen</td><td>0.683 &plusmn; 0.025</td><td>0.701 &plusmn; 0.031</td><td>0.748 &plusmn; 0.070</td><td>0.721 &plusmn; 0.022</td></tr>
+              <tr><td class="ta-l">PhysGaussian</td><td>0.728 &plusmn; 0.006</td><td>0.723 &plusmn; 0.061</td><td><u>0.706 &plusmn; 0.100</u></td><td>0.790 &plusmn; 0.072</td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td><u>0.534 &plusmn; 0.097</u></td><td><u>0.633 &plusmn; 0.091</u></td><td>0.711 &plusmn; 0.105</td><td><u>0.691 &plusmn; 0.099</u></td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><b>0.356 &plusmn; 0.015</b></td><td><b>0.564 &plusmn; 0.045</b></td><td><b>0.537 &plusmn; 0.031</b></td><td><b>0.519 &plusmn; 0.052</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+        </div>
+        </div>
+      </div>
+
+      <!-- --------- 4. FLOW -> REAL VIDEOS --------- -->
+      <h3 class="subhead" id="exp-flowgen">4 &middot; Flow &rarr; real videos</h3>
+      <p class="section__lead">
+        The estimated 2D flow drives a large video model (i2v + 2D trajectories, Wan-Move) on real
+        footage, and we score the physical plausibility of the generated videos with Physics-IQ.
+      </p>
+      <div class="tabs tabs--results">
+        <div class="tabs__bar" role="tablist" aria-label="Flow to real video results">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Qualitative videos</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Quantitative table</button>
+        </div>
+        <div class="tabs__panels">
+        <div class="tabs__panel active" role="tabpanel">
+      <p class="body">
+        These eight scenes, plus the two previewed at the top of the page, span liquids, smoke,
+        rigid&ndash;fluid impacts, and deformable contact &mdash; none of them seen during training.
+        Use the buttons under a clip to switch between our tracks + Wan-Move and the baselines,
+        including Wan-Move run without trajectories; hover a clip to play it.
+      </p>
+      <div class="gallery" id="flowgen-mount"></div>
+        </div>
+        <div class="tabs__panel" role="tabpanel">
+      <p class="body">
+        Physics-IQ is computed over our four domains and a 10% subset of the Physics-IQ test set.
+      </p>
+      <figure class="table-wrap">
+        <figcaption class="table-cap">
+          <strong>Table 7.</strong> Physics-IQ benchmark on different video datasets (overall score &uarr;).
+        </figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER</th><th>Kubric</th><th>PhysGaia</th><th>PhysInOne</th><th>Physics-IQ</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>0.008</td><td>0.308</td><td><u>0.296</u></td><td>0.161</td><td><b>0.405</b></td><td>0.237</td></tr>
+              <tr><td class="ta-l">PhysGen</td><td>0.073</td><td>0.126</td><td>0.031</td><td>0.194</td><td>0.191</td><td>0.163</td></tr>
+              <tr><td class="ta-l">PhysGaussian <span class="muted">(all cameras)</span></td><td><u>0.368</u></td><td>0.292</td><td>0.023</td><td>0.225</td><td>0.253</td><td>0.272</td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td>0.047</td><td>0.268</td><td>0.270</td><td><u>0.229</u></td><td>0.289</td><td><u>0.281</u></td></tr>
+              <tr><td class="ta-l">Wan-Move <span class="muted">(no tracks)</span></td><td>0.114</td><td><u>0.335</u></td><td><b>0.303</b></td><td>0.226</td><td>0.389</td><td>0.259</td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate</td><td><b>0.478</b></td><td><b>0.420</b></td><td>0.271</td><td><b>0.293</b></td><td><u>0.391</u></td><td><b>0.384</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+        </div>
+        </div>
+      </div>
+
+      <!-- --------- 5. OCCUPANCY --------- -->
+      <h3 class="subhead" id="exp-occ">5 &middot; Occupancy loss</h3>
+      <p class="section__lead">
+        A non-V-JEPA, geometry-level test: predicted 3D occupancy vs. ground-truth occupied voxels.
+        Occupancy IoU is the primary measure (higher is better); the mass ratio is a diagnostic.
+        Ours-Estimate is reported at occupancy thresholds 0.4 / 0.5 / 0.6.
+      </p>
+      <figure class="table-wrap">
+        <figcaption class="table-cap"><strong>Table 8.</strong> Occupancy-based evaluation: occupancy IoU (&uarr;) / mass ratio (&sim;1). Kubric MOVI-C is zero-shot.</figcaption>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead><tr><th class="ta-l">Method</th><th>CLEVRER</th><th>PhysGaia</th><th>PhysInOne</th><th>Kubric MOVI-C <span class="muted">(zero-shot)</span></th></tr></thead>
+            <tbody>
+              <tr><td class="ta-l">CogVideoX</td><td>0.417 / 1.101</td><td>0.085 / <b>0.766</b></td><td>0.088 / 0.261</td><td>0.084 / 0.562</td></tr>
+              <tr><td class="ta-l">PhysGen</td><td>0.534 / <b>1.017</b></td><td>0.120 / 1.326</td><td>0.216 / <u>1.215</u></td><td>0.424 / <b>1.023</b></td></tr>
+              <tr><td class="ta-l">PhysGaussian</td><td>0.345 / 0.830</td><td>0.108 / 0.633</td><td>0.115 / <b>0.785</b></td><td>0.204 / 0.535</td></tr>
+              <tr><td class="ta-l">PhysCtrl</td><td>0.148 / 0.685</td><td>0.113 / <u>0.687</u></td><td>0.100 / 0.701</td><td>0.129 / <u>0.698</u></td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate, 0.4</td><td><u>0.912 / 1.079</u></td><td>0.706 / 1.383</td><td>0.754 / 1.309</td><td>0.529 / 1.628</td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate, 0.5</td><td><u>0.912 / 1.079</u></td><td>0.706 / 1.383</td><td>0.754 / 1.310</td><td>0.529 / 1.612</td></tr>
+              <tr class="ours"><td class="ta-l">Ours-Estimate, 0.6</td><td><b>0.912 / 1.079</b></td><td><b>0.706</b> / 1.382</td><td><b>0.754</b> / 1.310</td><td><b>0.529</b> / 1.595</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+      <p class="body">
+        Occupancy IoU is the primary geometric metric; the mass ratio is a diagnostic, not a standalone
+        ranking. A value near one is meaningful mainly for approximately closed, mass-conserving objects
+        &mdash; it need not stay constant for phenomena such as smoke, and a method can hit &sim;1 while
+        placing the occupied volume incorrectly, so it should be read jointly with IoU.
+      </p>
+
+      <!-- --------- 6. FORCE AS INPUT --------- -->
+      <h3 class="subhead" id="exp-force">6 &middot; Force as input</h3>
+      <p class="section__lead">
+        The action is a 12-D per-frame descriptor (contact point, direction, magnitude, duration, and
+        active / local / global flags). Here we compare driving it <em>explicitly</em>, as a supplied
+        vector, against leaving it at zero so the dynamics must be inferred from past frames alone.
+      </p>
+
+      <h4 class="minihead">(a) Different explicit forces</h4>
+      <p class="body">Same initial scene, driven by different explicit force vectors. Each row shows the input frames on the left and a prediction vs. GT comparison on the right.</p>
+      <div class="gallery gallery--paired" id="explicit-force-mount"></div>
+
+      <h4 class="minihead">(b) Implicit forces</h4>
+      <p class="body">Force inferred from past-frame motion without an explicit force input. As above, the
+        input frames are on the left and a prediction vs. GT comparison on the right.</p>
+      <div class="gallery gallery--paired" id="implicit-force-mount"></div>
+
+      <!-- --------- 7. ABLATIONS --------- -->
+      <h3 class="subhead" id="exp-ablation">Ablations</h3>
+      <p class="section__lead">
+        We study the key design choices: voxel resolution, voxel channels, the depth estimator, the
+        projection loss, input views, the occupancy/occlusion losses, and the training objective.
+      </p>
+
+      <div class="tabs">
+        <div class="tabs__bar" role="tablist">
+          <button class="tabs__btn active" role="tab" aria-selected="true">Voxel resolution</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Voxel channels</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Depth estimator</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Projection loss</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Input views</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Occ. &amp; occlusion losses</button>
+          <button class="tabs__btn" role="tab" aria-selected="false">Training objective</button>
+        </div>
+        <div class="tabs__panels">
+
+        <div class="tabs__panel active" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 9.</strong> Voxel grid resolution vs. quality/compute. Finer grids improve
+              all metrics at a memory cost.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Grid</th><th>Mem. &darr;</th><th>IoU &uarr;</th><th>2D &darr;</th><th>3D &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">10&sup3;</td><td>1.44 GB</td><td>51.74%</td><td>2.75</td><td>1.60</td></tr>
+                  <tr><td class="ta-l">15&sup3;</td><td>4.70 GB</td><td>65.14%</td><td>2.63</td><td>1.55</td></tr>
+                  <tr><td class="ta-l">20&sup3;</td><td>11.06 GB</td><td>69.79%</td><td>2.02</td><td>0.99</td></tr>
+                  <tr class="ours"><td class="ta-l">25&sup3;</td><td>23.45 GB</td><td><b>87.13%</b></td><td><b>1.78</b></td><td><b>0.61</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 10.</strong> Voxel state channels (monocular). Occupancy and observed channels
+              are both important for geometry.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table">
+                <thead>
+                  <tr><th class="ta-l">Voxel state</th><th># ch.</th><th>IoU &uarr;</th><th>2D &darr;</th><th>3D &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">Features only</td><td>1408</td><td>N/A</td><td>4.97</td><td>2.42</td></tr>
+                  <tr><td class="ta-l">+ occupancy</td><td>1409</td><td>67.52%</td><td>2.96</td><td>1.02</td></tr>
+                  <tr class="ours"><td class="ta-l">+ occupancy + observed</td><td>1410</td><td><b>87.13%</b></td><td><b>1.78</b></td><td><b>0.61</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 11.</strong> Depth / geometry estimator. Lifting is highly sensitive to
+              geometric quality; MoGe is best.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Estimator</th><th>IoU &uarr;</th><th>2D &darr;</th><th>3D &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">VidDepthAnything + Mast3r</td><td>38.64%</td><td>3.19</td><td>1.76</td></tr>
+                  <tr><td class="ta-l">VGGT</td><td>61.03%</td><td>2.19</td><td>0.88</td></tr>
+                  <tr class="ours"><td class="ta-l">MoGe</td><td><b>87.13%</b></td><td><b>1.78</b></td><td><b>0.61</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 12.</strong> Projection loss. The 2D projection loss is a key component of the
+              objective.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Proj. loss</th><th>Mem. &darr;</th><th>IoU &uarr;</th><th>2D &darr;</th><th>3D &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">Without</td><td>100%</td><td>69.47%</td><td>3.24</td><td>1.75</td></tr>
+                  <tr class="ours"><td class="ta-l">With</td><td>110%</td><td><b>87.13%</b></td><td><b>1.78</b></td><td><b>0.61</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 13.</strong> Number of input views and view-angle span at inference
+              (multi-camera / single-camera).
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table">
+                <thead>
+                  <tr><th class="ta-l">Views</th><th>Angle</th><th>IoU % &uarr;</th><th>2D feat. &darr;</th><th>3D feat. &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">1</td><td>0&deg;</td><td>71.87 / 80.00</td><td>2.99 / 2.23</td><td>1.47 / 0.61</td></tr>
+                  <tr><td class="ta-l">2</td><td>&lt;45&deg;</td><td>71.07 / 87.62</td><td>2.82 / 2.22</td><td>1.48 / 0.53</td></tr>
+                  <tr><td class="ta-l">max</td><td>&gt;90&deg;</td><td>71.50 / 90.25</td><td>2.18 / 1.43</td><td>1.52 / 0.32</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 14.</strong> Occupancy and occlusion losses (5,000 steps). Removing either
+              term degrades occupancy and motion.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Configuration</th><th>IoU &uarr;</th><th>2D flow &darr;</th><th>3D flow &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="ours"><td class="ta-l">Full model</td><td><b>0.709</b></td><td><b>0.685</b></td><td><b>0.655</b></td></tr>
+                  <tr><td class="ta-l">w/o occupancy loss</td><td>0.572</td><td>0.854</td><td><u>0.713</u></td></tr>
+                  <tr><td class="ta-l">w/o occlusion loss</td><td><u>0.580</u></td><td><u>0.837</u></td><td>0.804</td></tr>
+                  <tr><td class="ta-l">w/o both losses</td><td>0.572</td><td>0.946</td><td>0.829</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        <div class="tabs__panel" role="tabpanel">
+          <figure class="table-wrap">
+            <figcaption class="table-cap">
+              <strong>Table 15.</strong> Deterministic regression vs. flow-matching variants (5,000 steps,
+              24-frame). DF: diffusion forcing; HG: history guidance.
+            </figcaption>
+            <div class="table-scroll">
+              <table class="results-table flow-table">
+                <thead>
+                  <tr><th class="ta-l">Method</th><th>IoU &uarr;</th><th>2D flow &darr;</th><th>3D flow &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ta-l">Binary occupancy target</td><td>0.330</td><td>0.724</td><td>0.733</td></tr>
+                  <tr><td class="ta-l">Deterministic regression</td><td>0.208</td><td>0.822</td><td>0.762</td></tr>
+                  <tr><td class="ta-l">Conditional (DF)</td><td>0.572</td><td>0.700</td><td>0.680</td></tr>
+                  <tr class="ours"><td class="ta-l">Vanilla guidance (DF + HG)</td><td><b>0.709</b></td><td><b>0.685</b></td><td><b>0.655</b></td></tr>
+                  <tr><td class="ta-l">Fractional guidance (DF + HG)</td><td><u>0.660</u></td><td><u>0.687</u></td><td>0.694</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+        </div>
+
+        </div>
+      </div>
+      <p class="body">
+        Against an equal-capacity deterministic regression head, generative flow matching is decisively
+        better (Table 15). For longer rollouts we switch the binary occupancy output to a continuous
+        value compatible with flow matching / diffusion forcing, so binary focal / BCE losses no longer
+        apply; vanilla history-guided diffusion is the best configuration and is used for
+        Ours-Estimate.
+      </p>
+      <p class="body">
+        The method is not tied to any single depth predictor — VGGT works too (slightly worse). Because
+        we predict occupancy rather than hallucinate unseen regions with a generative prior, and a JEPA
+        encoder can be jointly trained to absorb depth cues, geometry can in principle be learned more
+        directly from video; that extension is outside this work's scope.
+      </p>
+      <!-- --------- 8. FAILURE EXAMPLES --------- -->
+      <h3 class="subhead" id="exp-fail">Failure examples</h3>
+      <p class="section__lead">
+        Typical failure modes. The main one is noise accumulation over long autoregressive rollouts.
+        Scenes far from the training distribution also strain both the decoder and the predictor
+        together, and geometric fidelity is bounded by the V-JEPA encoder resolution and
+        monocular-depth accuracy, so very high-frequency deformation is hard to capture at the
+        current voxel resolution.
+      </p>
+      <div class="gallery gallery--1" id="failure-long-mount"></div>
+      <div class="gallery" id="failure-mount" style="margin-top:1.25rem"></div>
+
+    </section>
+
+    <!-- ===================== CONCLUSION ===================== -->
+    <section class="section" id="conclusion">
+      <h2 class="section__title">Conclusion</h2>
+      <div class="conclusion">
+        <p>
+          We introduced <strong>Neural Voxel Dynamics</strong> to bridge the gap between 2D video
+          generation and 3D physics simulation. By lifting monocular video into a sparse 3D latent
+          voxel space and learning an action-conditioned implicit feature-advection model, we enable
+          materially-agnostic and geometrically-grounded physical transitions using only passive
+          monocular video. This disentangles camera perspective from material dynamics, avoids manual
+          preprocessing such as segmentation or material estimation, and enables perspective-independent
+          forecasting and the unified simulation of complex, heterogeneous phenomena — rigid collisions
+          and fluid flow alike — without relying on explicit physics-engine states.
+        </p>
+      </div>
+      <div class="limits">
+        <div class="limits__card">
+          <h4>Limitations &amp; future work</h4>
+          <ul>
+            <li>Geometric fidelity is bounded by the V-JEPA encoder resolution and monocular depth
+                accuracy; estimation artifacts can propagate into the voxel grid.</li>
+            <li>Sparse tokenization scales poorly to unbounded environments, moving cameras, and
+                high-frequency deformation; long rollouts accumulate noise, mitigable via larger
+                training chunks or by feeding refined depth and V-JEPA latents back into the model.</li>
+            <li>Explicit actions are annotated only for the CLEVRER/MuJoCo data; elsewhere the action
+                is zero and the dynamics must be inferred, so scaling the implicit-force path to diverse
+                real-world video will likely require a larger model and training corpus.</li>
+            <li>The model does not generatively complete fully unseen regions; the control interface is a
+                parameterized force vector.</li>
+            <li>Future work: constructing full voxel volumes from image input, a universal V-JEPA
+                decoder for photorealistic video, continuous 3D representations beyond discrete voxels,
+                and dense multi-point articulated (robotic) actions.</li>
+          </ul>
+        </div>
+        <div class="limits__card">
+          <h4>Broader impact</h4>
+          <p>
+            Grounding generative video in Euclidean space has strong positive potential for physical
+            planning, autonomous driving, and robotics, where structural and physical accuracy matter for
+            safety, and could accelerate safe offline reinforcement learning. As with any high-fidelity
+            video generation, increased realism raises misuse risk (misinformation, deepfakes), motivating
+            parallel investment in forensics and watermarking.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Neural Voxel Dynamics · project page</p>
+  </footer>
+
+  <!-- config.js holds swappable assets; main.js renders media + galleries. -->
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Buttons without a link yet say "Coming soon" on hover, focus and click -->
+  <script>
+    (function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.btn--soon'), function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          btn.classList.add('show');
+          setTimeout(function () { btn.classList.remove('show'); }, 1600);
+        });
+      });
+    })();
+  </script>
+
+  <!-- Tabbed results -->
+  <script>
+    (function () {
+      var groups = document.querySelectorAll('.tabs');
+      Array.prototype.forEach.call(groups, function (group) {
+        var bar = group.firstElementChild;
+        var panelsWrap = bar && bar.nextElementSibling;
+        var btns = bar ? Array.prototype.filter.call(bar.children, function (el) {
+          return el.classList.contains('tabs__btn');
+        }) : [];
+        var panels = panelsWrap ? Array.prototype.filter.call(panelsWrap.children, function (el) {
+          return el.classList.contains('tabs__panel');
+        }) : [];
+        Array.prototype.forEach.call(btns, function (btn, i) {
+          btn.addEventListener('click', function () {
+            Array.prototype.forEach.call(btns, function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+            Array.prototype.forEach.call(panels, function (p) { p.classList.remove('active'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            if (panels[i]) panels[i].classList.add('active');
+          });
+        });
+      });
+    })();
+  </script>
+
+  <!-- Experiments sub-nav scroll-spy -->
+  <script>
+    (function () {
+      var subnav = document.getElementById('exp-subnav');
+      if (!subnav) return;
+      var links = Array.prototype.slice.call(subnav.querySelectorAll('a'));
+      var map = links.map(function (a) {
+        return { link: a, target: document.querySelector(a.getAttribute('href')) };
+      }).filter(function (m) { return m.target; });
+
+      function onScroll() {
+        var pos = window.scrollY + 160;
+        var current = map[0];
+        map.forEach(function (m) {
+          if (m.target.offsetTop <= pos) current = m;
+        });
+        links.forEach(function (a) { a.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>
