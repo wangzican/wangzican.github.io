@@ -1,0 +1,17 @@
+# Externally hosted projects: metadata only, with no local project page or assets.
+- title: "Learning to Solve PDEs on Neural Shape Representations"
+  authors:
+    - name: "Lilian Welschinger"
+      url: "https://welschinger.github.io/"
+    - name: "Yilin Liu"
+      url: "https://yilinliu77.github.io/"
+    - name: "Zican Wang"
+    - name: "Niloy Mitra"
+      url: "http://www0.cs.ucl.ac.uk/staff/N.Mitra/"
+  type: "CVPR 2026"
+  # First arXiv submission; use a UTC timestamp to match collection dates.
+  date: 2025-12-24 00:00:00 +00:00
+  thumbnail: "https://welschinger.github.io/Learning-to-Solve-PDEs-on-Neural-Shape-Representations/assets/Teaser.png"
+  pdf: "https://arxiv.org/pdf/2512.21311"
+  code_url: "https://github.com/welschinger/Learning-to-Solve-PDEs-on-Neural-Shape-Representations/tree/main/src"
+  link: "https://welschinger.github.io/Learning-to-Solve-PDEs-on-Neural-Shape-Representations/"

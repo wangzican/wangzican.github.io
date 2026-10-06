@@ -1,0 +1,8 @@
+{% assign publications = site.publications | concat: site.data.external_publications | sort: 'date' | reverse %}
+<ul>
+  {% for post in publications %}
+    {% unless post.hidden == true %}
+      {% include archive-single.html %}
+    {% endunless %}
+  {% endfor %}
+</ul>

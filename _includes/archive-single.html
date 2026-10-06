@@ -20,7 +20,7 @@
     <span style="font-size: 20px;"><b>
       {% if post.link %}
       <!-- For external links, add a link symbol -->
-        <a class="hiddenlink" href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+        <a class="hiddenlink" href="{{ post.link }}">{{ title }}</a>{% if post.url %} <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>{% endif %}
       {% else %}
         <a class="hiddenlink" href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
       {% endif %}
@@ -55,10 +55,10 @@
       <!-- For external links, add a link symbol -->
         <a class="mybutton" href="{{ post.code_url }}">Code</a> 
       {% endif %}
-      <!-- there will always be a auto-generated url -->
+      <!-- Externally hosted projects may have no local permalink. -->
       {% if post.link %}
       <!-- For external links, add a link symbol -->
-        <a class="mybutton" href="{{ post.link }}">Project Page</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+        <a class="mybutton" href="{{ post.link }}">Project Page</a>{% if post.url %} <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>{% endif %}
       {% else %}
         <a class="mybutton" href="{{ base_path }}{{ post.url }}" rel="permalink">Project Page</a>
       {% endif %}
