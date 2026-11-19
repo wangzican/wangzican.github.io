@@ -28,6 +28,9 @@
                             multiview_smoke_<m20|m10|p10|p20>_pred.mp4
      3_flow/                flow2d_<rigid|smoke|fluid|realworld>_<pred|gt>.mp4
      4_flow_to_video/       one folder per method, the same <scene>.mp4 in each:
+       gt/                 Original Physics-IQ footage for potato and paper smoke:
+                            2.5 s of future after the 3 s conditioning segment,
+                            resized to 960x540 at 16 fps; provenance in gt/sources.json
        ours_wanmove/        Wan-Move driven by our tracks
        cogvideox/           720x480 clips had their letterbox bars cropped (-> 720x402);
                             the four Physics-IQ scenes are already 960x540
@@ -96,15 +99,16 @@ window.SITE_CONFIG = {
        placeholderText: optional message shown while a clip is unavailable
        aspect: "W / H" to size the tile to a non-square clip instead of
                letterboxing it inside a square slot (e.g. "16 / 9")
-       grid: [{ src, tag, compareSrc }, ...] to show several clips as one
+       grid: [{ src, tag, compareSrc, featured }, ...] to show several clips as one
                card, in a small grid that plays together on hover (e.g. novel
                views); `tag` is the corner pill, and a tile with `compareSrc`
-               gets its own reveal slider
+               gets its own reveal slider; `featured` highlights a preview tile
+       columns: optional column count for a grid (otherwise chosen automatically)
        frames: N to show the clip as N sampled stills in a small grid
                instead of a looping video (evenly spaced across the whole
                clip, first and last frame included) — good for very short
                "input" clips that flicker when played
-       autoplay: true to start a reveal-slider tile playing (muted, looping)
+       autoplay: true to start a comparison, method switcher, or grid playing (muted, looping)
                as soon as the page loads rather than on hover; skipped for
                visitors who ask for reduced motion
        methods: [{ label, src, selected }, ...] to show one clip per method with a
@@ -117,26 +121,22 @@ window.SITE_CONFIG = {
      --------------------------------------------------------------- */
   galleries: {
 
-    /* Hero preview under the TL;DR: two of the section-4 scenes ("flowgen-mount" has the
-       other eight), autoplaying so there is motion without a hover */
+    /* Hero preview: potato and paper smoke, with GT and three methods side by side.
+       All ten scenes and the complete method comparisons are in "flowgen-mount". */
     "preview-mount": [
-      { badge: "Rigid + fluid", title: "Potato in water", autoplay: true, aspect: "16 / 9",
-        methods: [
-          { label: "CogVideoX",                  src: "assets/webvids/4_flow_to_video/cogvideox/potato_in_water.mp4" },
-          { label: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/potato_in_water.mp4" },
-          { label: "PhysGen",                    src: "assets/webvids/4_flow_to_video/physgen/potato_in_water.mp4" },
-          { label: "PhysGaussian",               src: "assets/webvids/4_flow_to_video/physgaussian/potato_in_water.mp4" },
-          { label: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/potato_in_water.mp4" },
-          { label: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/potato_in_water.mp4", selected: true },
+      { title: "Potato in water", autoplay: true, columns: 4,
+        grid: [
+          { tag: "Ground truth (GT)",          src: "assets/webvids/4_flow_to_video/gt/potato_in_water.mp4" },
+          { tag: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/potato_in_water.mp4", featured: true },
+          { tag: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/potato_in_water.mp4" },
+          { tag: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/potato_in_water.mp4" },
         ] },
-      { badge: "Smoke", title: "Paper smoke", autoplay: true, aspect: "16 / 9",
-        methods: [
-          { label: "CogVideoX",                  src: "assets/webvids/4_flow_to_video/cogvideox/paper_smoke.mp4" },
-          { label: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/paper_smoke.mp4" },
-          { label: "PhysGen",                    src: "assets/webvids/4_flow_to_video/physgen/paper_smoke.mp4" },
-          { label: "PhysGaussian",               src: "assets/webvids/4_flow_to_video/physgaussian/paper_smoke.mp4" },
-          { label: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/paper_smoke.mp4" },
-          { label: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/paper_smoke.mp4", selected: true },
+      { title: "Paper smoke", autoplay: true, columns: 4,
+        grid: [
+          { tag: "Ground truth (GT)",          src: "assets/webvids/4_flow_to_video/gt/paper_smoke.mp4" },
+          { tag: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/paper_smoke.mp4", featured: true },
+          { tag: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/paper_smoke.mp4" },
+          { tag: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/paper_smoke.mp4" },
         ] },
     ],
 
@@ -242,6 +242,26 @@ window.SITE_CONFIG = {
        clip per method behind a row of buttons. To add a baseline clip, drop it in
        4_flow_to_video/<method>/<scene>.mp4 and put that path in the matching src. */
     "flowgen-mount": [
+      { badge: "Rigid + fluid", title: "Potato in water", desc: "Rigid–fluid interaction.", aspect: "16 / 9",
+        methods: [
+          { label: "Ground truth (GT)",          src: "assets/webvids/4_flow_to_video/gt/potato_in_water.mp4" },
+          { label: "CogVideoX",                  src: "assets/webvids/4_flow_to_video/cogvideox/potato_in_water.mp4" },
+          { label: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/potato_in_water.mp4" },
+          { label: "PhysGen",                    src: "assets/webvids/4_flow_to_video/physgen/potato_in_water.mp4" },
+          { label: "PhysGaussian",               src: "assets/webvids/4_flow_to_video/physgaussian/potato_in_water.mp4" },
+          { label: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/potato_in_water.mp4" },
+          { label: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/potato_in_water.mp4", selected: true },
+        ] },
+      { badge: "Smoke", title: "Paper smoke", desc: "Smoke rising from paper.", aspect: "16 / 9",
+        methods: [
+          { label: "Ground truth (GT)",          src: "assets/webvids/4_flow_to_video/gt/paper_smoke.mp4" },
+          { label: "CogVideoX",                  src: "assets/webvids/4_flow_to_video/cogvideox/paper_smoke.mp4" },
+          { label: "PhysCtrl",                   src: "assets/webvids/4_flow_to_video/physctrl/paper_smoke.mp4" },
+          { label: "PhysGen",                    src: "assets/webvids/4_flow_to_video/physgen/paper_smoke.mp4" },
+          { label: "PhysGaussian",               src: "assets/webvids/4_flow_to_video/physgaussian/paper_smoke.mp4" },
+          { label: "Wan-Move (no trajectories)", src: "assets/webvids/4_flow_to_video/wanmove_notrack/paper_smoke.mp4" },
+          { label: "Our tracks + Wan-Move",      src: "assets/webvids/4_flow_to_video/ours_wanmove/paper_smoke.mp4", selected: true },
+        ] },
       { badge: "Fluid", title: "Coffee pour", desc: "Pouring into a cup. CogVideoX shown at 2× speed.", aspect: "16 / 9",
         methods: [
           { label: "CogVideoX",                  src: "assets/webvids/4_flow_to_video/cogvideox/coffee_pour.mp4" },

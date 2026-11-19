@@ -79,13 +79,15 @@ pdf: '/publication/nvd/assets/voxelDynamics.pdf'
       Essentially, we learn a reusable V-JEPA dynamics module.
     </p>
 
-    <!-- PREVIEW — two CogVideoX-vs-ours clips from Experiments 3b, mounted from js/config.js -->
+    <!-- PREVIEW — selected methods side by side, mounted from js/config.js -->
     <figure class="preview">
       <div class="gallery gallery--preview" id="preview-mount"></div>
       <figcaption class="cap">
-        <b>Flow-guided video generation on unseen real footage.</b> Wan-Move guided by our predicted
-        tracks; use the buttons under a clip to switch to a baseline, or see more in
-        <a href="#exp-flowgen">Experiments</a>.
+        <b>Flow-guided video generation on unseen real footage.</b> Ground truth (GT) alongside
+        our predicted tracks + Wan-Move, Wan-Move without trajectories, and PhysCtrl.
+        See all ten scenes and all methods in <a href="#exp-flowgen">Experiments</a>.
+        <span class="preview__credit">GT footage from <a href="https://github.com/google-deepmind/physics-IQ-benchmark">Physics-IQ</a>
+          (DeepMind Technologies Limited, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>), trimmed and resized.</span>
       </figcaption>
     </figure>
 
@@ -621,7 +623,7 @@ pdf: '/publication/nvd/assets/voxelDynamics.pdf'
         <div class="tabs__panels">
         <div class="tabs__panel active" role="tabpanel">
       <p class="body">
-        These eight scenes, plus the two previewed at the top of the page, span liquids, smoke,
+        These ten scenes span liquids, smoke,
         rigid&ndash;fluid impacts, and deformable contact &mdash; none of them seen during training.
         Use the buttons under a clip to switch between our tracks + Wan-Move and the baselines,
         including Wan-Move run without trajectories; hover a clip to play it.

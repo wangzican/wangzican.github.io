@@ -324,11 +324,15 @@
   /* Show several clips as one card: a small grid that plays together. */
   function videoGrid(item) {
     var tiles = item.grid || [];
-    var cols = Math.max(1, Math.ceil(Math.sqrt(tiles.length)));
+    var cols = Math.max(1, parseInt(item.columns, 10) || Math.ceil(Math.sqrt(tiles.length)));
+    var autoplay = autoplays(item);
 
     var grid = document.createElement("div");
     grid.className = "tilegrid";
     grid.style.setProperty("--cols", String(cols));
+    grid.tabIndex = 0;
+    grid.setAttribute("role", "group");
+    grid.setAttribute("aria-label", (item.title || "Video") + ": press Space to play or pause all clips");
 
     var vids = [];        // plain clips
     var players = [];     // reveal comparisons, which play their own two clips
@@ -336,6 +340,7 @@
     tiles.forEach(function (tile) {
       var cell = document.createElement("div");
       cell.className = "tilegrid__cell";
+      if (tile.featured) cell.classList.add("tilegrid__cell--featured");
       var compareSrc = (tile.compareSrc || "").trim();
 
       if (compareSrc) {
@@ -373,12 +378,12 @@
     var isPlaying = false;
 
     function setPlaying(play) {
-      isPlaying = play;
-      if (play) {                     // keep the views in step with each other
+      if (play && !isPlaying) {       // start the views together
         Array.prototype.slice.call(grid.querySelectorAll("video")).forEach(function (v) {
           try { v.currentTime = 0; } catch (err) { /* not seekable yet */ }
         });
       }
+      isPlaying = play;
       vids.forEach(function (v) {
         if (play) v.play().catch(function () {});
         else v.pause();
@@ -390,12 +395,19 @@
       if (e.pointerType !== "touch") setPlaying(true);
     });
     grid.addEventListener("pointerleave", function (e) {
-      if (e.pointerType !== "touch") setPlaying(false);
+      if (e.pointerType !== "touch" && !autoplay) setPlaying(false);
     });
     grid.addEventListener("pointerdown", function (e) {
       if (e.pointerType === "touch") setPlaying(!isPlaying);
     });
+    grid.addEventListener("keydown", function (e) {
+      if (e.key === " ") {
+        e.preventDefault();
+        setPlaying(!isPlaying);
+      }
+    });
 
+    grid.setPlaying = setPlaying;
     return grid;
   }
 
@@ -549,7 +561,7 @@
       card.appendChild(body);
 
       mount.appendChild(card);
-      // start an autoplaying reveal only once it is in the page
+      // start an autoplaying comparison, method switcher, or grid once mounted
       if (autoplays(item) && mediaEl.setPlaying) mediaEl.setPlaying(true);
     });
   }

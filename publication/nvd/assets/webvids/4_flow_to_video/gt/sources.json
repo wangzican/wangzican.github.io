@@ -1,0 +1,28 @@
+{
+  "dataset": "Physics-IQ",
+  "creator": "DeepMind Technologies Limited",
+  "copyright_year": 2024,
+  "dataset_url": "https://github.com/google-deepmind/physics-IQ-benchmark",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "processing": {
+    "start_seconds": 3,
+    "duration_seconds": 2.5,
+    "note": "First 2.5 seconds of the future, after the 3-second conditioning segment.",
+    "width": 960,
+    "height": 540,
+    "frames_per_second": 16,
+    "codec": "H.264",
+    "audio": false
+  },
+  "clips": [
+    {
+      "file": "potato_in_water.mp4",
+      "source_url": "https://storage.googleapis.com/physics-iq-benchmark/full-videos/take-1/30FPS/0144_full-videos_30FPS_perspective-right_take-1_trimmed-potato-in-water.mp4"
+    },
+    {
+      "file": "paper_smoke.mp4",
+      "source_url": "https://storage.googleapis.com/physics-iq-benchmark/full-videos/take-1/30FPS/0139_full-videos_30FPS_perspective-left_take-1_trimmed-paper-smoke.mp4"
+    }
+  ]
+}
